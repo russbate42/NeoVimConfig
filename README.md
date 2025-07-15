@@ -29,6 +29,9 @@ Note: To make this work, run this from the neovim command line
 **Treesitter**
 Just basic, we can add more features later.
 
+**Transparent**
+`:TransparentEnable` or `:TransparentDisable` or `:TransparentToggle`
+
 #### Available Color Schemes
 These are auto-loaded in colorscheme.lua
  - tokyonight
