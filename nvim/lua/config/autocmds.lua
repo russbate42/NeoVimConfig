@@ -1,0 +1,3 @@
+
+print("In VIM Autocommands")
+
