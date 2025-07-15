@@ -3,11 +3,45 @@
 This is a repository for maintaining versions of neovim
 
 ## Setup
+This package uses nvim stable release appimages. It is only tested on `x86_64`
+Ubuntu architecture.
+
+### Download NeoVim
+Go to the [Releases](https://github.com/neovim/neovim/releases) page. Under the
+latest stable build, select the app image for the appropriate architecture `x86_64`.
+
+Simply change the permissions on the appimage `chmod u+x nvim-linux-x86_64.appimage`
+
+Currently working with the following version:
+```bash
+NVIM v0.11.3
+Build type: Release
+LuaJIT 2.1.1741730670
+Run "nvim -V1 -v" for more info
+```
+
+### Setup Local
+Make sure all packages are installed
+
+**Recommended Packages**
+```bash
+sudo apt install nodejs npm
+sudo npm install -g neovim
+cargo install ripgrep
+sudo apt install luarocks
+```
+For LSP compatibility with python
+```bash
+npm install -g pyright
+```
+
+In addition, make sure a basic python3 installation is set up.
+
 Run the following commands in order:
 
 `source setup_nvim.sh`
 
-## User
+**Optional** Alias the neovim appimage to something like `nv` or `nvim`.
 
 ## Development
 **Reminder** When creating new plugin files run `source setup_nvim.sh`
@@ -32,6 +66,8 @@ Just basic, we can add more features later.
 **Transparent**
 `:TransparentEnable` or `:TransparentDisable` or `:TransparentToggle`
 
+**Indent Blankine**
+
 #### Available Color Schemes
 These are auto-loaded in colorscheme.lua
  - tokyonight
@@ -44,13 +80,22 @@ These are auto-loaded in colorscheme.lua
  - onedark
 
 #### Package Wish List
- - Transparent
+ - VimTeX
  - LuaSnips
+ - NeoVim Autocomplete
  - Undo-tree
  - VimTeX
+ - nvim gpt
 
 ### To Do
-- [ ]
+#### In Order
+ - [ ] Install nvim-cmp with LuaSnips
+ - [ ] VimTeX
+ - [ ] Update nvim-cmp with LSP features
+ - - [ ] install pyright
+
+#### Unordered
+ - [ ] Install an AI client
 
 ### Structure
 This neovim config uses the following structure:
@@ -69,10 +114,12 @@ This neovim config uses the following structure:
 │           └── init.lua
 ```
 
-## Motions
+## User
+
+### Motions
 Here are the essential screen scrolling hotkeys in Neovim:
 
-### Scrolling
+#### Scrolling
 **Basic Scrolling:**
 - `Ctrl-f` - Scroll forward (down) one full screen
 - `Ctrl-b` - Scroll backward (up) one full screen
