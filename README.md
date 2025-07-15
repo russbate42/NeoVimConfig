@@ -21,6 +21,10 @@ Run the following commands in order:
 
 **rainbow-delimeters**
 
+**Markdown Preview**
+Note: To make this work, run this from the neovim command line
+`:call mkdp#util#install()`
+
 #### Available Color Schemes
 These are auto-loaded in colorscheme.lua
  - tokyonight
@@ -34,7 +38,6 @@ These are auto-loaded in colorscheme.lua
 
 #### Package Wish List
  - Treesitter
- - Markdown Preview
  - Transparent
  - LuaSnips
  - Indent Blankline
