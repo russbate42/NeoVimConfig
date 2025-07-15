@@ -8,7 +8,7 @@ print('')
 print('Loading custom configurations ..')
 require('config')
 
-vim.cmd([[colorscheme tokyonight]])
+vim.cmd([[colorscheme dracula]])
 
 print('Done loading configs and plugins ..')
 
