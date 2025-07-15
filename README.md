@@ -10,6 +10,7 @@ Run the following commands in order:
 ## User
 
 ## Development
+**Reminder** When creating new plugin files run `source setup_nvim.sh`
 
 ### Packages
 
