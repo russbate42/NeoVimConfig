@@ -80,6 +80,8 @@ These are auto-loaded in colorscheme.lua
  - onedark
 
 #### Package Wish List
+ - Telescope
+ - Harpoon2
  - VimTeX
  - LuaSnips
  - NeoVim Autocomplete
@@ -91,6 +93,8 @@ These are auto-loaded in colorscheme.lua
 #### In Order
  - [ ] Install nvim-cmp with LuaSnips
  - [ ] VimTeX
+ - [ ] Telescope
+ - [ ] Harpoon2
  - [ ] Update nvim-cmp with LSP features
  - - [ ] install pyright
 
