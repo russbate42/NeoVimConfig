@@ -26,6 +26,9 @@ Run the following commands in order:
 Note: To make this work, run this from the neovim command line
 `:call mkdp#util#install()`
 
+**Treesitter**
+Just basic, we can add more features later.
+
 #### Available Color Schemes
 These are auto-loaded in colorscheme.lua
  - tokyonight
@@ -38,11 +41,10 @@ These are auto-loaded in colorscheme.lua
  - onedark
 
 #### Package Wish List
- - Treesitter
  - Transparent
  - LuaSnips
- - Indent Blankline
  - Undo-tree
+ - VimTeX
 
 ### To Do
 - [ ]
