@@ -10,22 +10,14 @@ require('config')
 
 vim.cmd([[colorscheme dracula]])
 
--- For Markdown Preview
-vim.cmd([[let g:mkdp_preview_options = {
-    \ 'mkit': {},
-    \ 'katex': {},
-    \ 'uml': {},
-    \ 'maid': {},
-    \ 'disable_sync_scroll': 0,
-    \ 'sync_scroll_type': 'middle',
-    \ 'hide_yaml_meta': 1,
-    \ 'sequence_diagrams': {},
-    \ 'flowchart_diagrams': {},
-    \ 'content_editable': v:false,
-    \ 'disable_filename': 0,
-    \ 'toc': {}
-    \ }
-]])
 print('Done loading configs and plugins ..')
 
+vim.api.nvim_set_hl(0, "TelescopeNormal", { bg = "none" })
+vim.api.nvim_set_hl(0, "TelescopeBorder", { bg = "none" })
+vim.api.nvim_set_hl(0, "TelescopePromptNormal", { bg = "none" })
+vim.api.nvim_set_hl(0, "TelescopePromptBorder", { bg = "none" })
+vim.api.nvim_set_hl(0, "TelescopeResultsNormal", { bg = "none" })
+vim.api.nvim_set_hl(0, "TelescopeResultsBorder", { bg = "none" })
+vim.api.nvim_set_hl(0, "TelescopePreviewNormal", { bg = "none" })
+vim.api.nvim_set_hl(0, "TelescopePreviewBorder", { bg = "none" })
 

@@ -71,6 +71,7 @@ Just basic, we can add more features later.
 **LuaSnips**
 
 **nvim-cmp**
+**VimTeX**
 
 #### Available Color Schemes
 These are auto-loaded in colorscheme.lua
@@ -84,7 +85,6 @@ These are auto-loaded in colorscheme.lua
  - onedark
 
 #### Package Wish List
- - VimTeX
  - Telescope
  - Harpoon2
  - Undo-tree
@@ -92,8 +92,6 @@ These are auto-loaded in colorscheme.lua
 
 ### To Do
 #### In Order
- - [x] Install nvim-cmp with LuaSnips
- - [ ] VimTeX
  - [ ] Telescope
  - [ ] Harpoon2
  - [ ] Update nvim-cmp with LSP features
@@ -104,6 +102,7 @@ These are auto-loaded in colorscheme.lua
 
 ### Recent Changes
  - [x] Install nvim-cmp with LuaSnips
+ - [x] VimTeX
 
 ### Structure
 This neovim config uses the following structure:
