@@ -2,8 +2,8 @@
 print('NeoVim main init.lua loading..')
 print('')
 print("For spelling type >>> :setlocal spell spelllang=en_us")
+print("To suppress VimTeX warnings type >>> :lua vim.g.vimtex_quickfix_mode = 0")
 print('')
-
 
 print('Loading custom configurations ..')
 require('config')
