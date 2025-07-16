@@ -11,3 +11,6 @@ vim.opt.expandtab = true
 
 vim.opt.smartindent = true
 
+vim.opt.wrap = true
+vim.opt.textwidth = 80
+

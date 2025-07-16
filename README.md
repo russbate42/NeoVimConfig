@@ -68,6 +68,10 @@ Just basic, we can add more features later.
 
 **Indent Blankine**
 
+**LuaSnips**
+
+**nvim-cmp**
+
 #### Available Color Schemes
 These are auto-loaded in colorscheme.lua
  - tokyonight
@@ -80,18 +84,15 @@ These are auto-loaded in colorscheme.lua
  - onedark
 
 #### Package Wish List
+ - VimTeX
  - Telescope
  - Harpoon2
- - VimTeX
- - LuaSnips
- - NeoVim Autocomplete
  - Undo-tree
- - VimTeX
  - nvim gpt
 
 ### To Do
 #### In Order
- - [ ] Install nvim-cmp with LuaSnips
+ - [x] Install nvim-cmp with LuaSnips
  - [ ] VimTeX
  - [ ] Telescope
  - [ ] Harpoon2
@@ -100,6 +101,9 @@ These are auto-loaded in colorscheme.lua
 
 #### Unordered
  - [ ] Install an AI client
+
+### Recent Changes
+ - [x] Install nvim-cmp with LuaSnips
 
 ### Structure
 This neovim config uses the following structure:
