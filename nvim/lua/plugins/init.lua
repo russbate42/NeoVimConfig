@@ -1,6 +1,8 @@
-print('In plugins init.lua')
+-- print('In plugins init.lua')
 -- print(package.path)
 
+-- These are plugins that are just core to this configuration so we leave them
+-- in an init file
 return {
 
     {"kylechui/nvim-surround",

@@ -1,4 +1,4 @@
-print("colorscheme.lua loaded!")
+-- print("colorscheme.lua loaded!")
 -- ~/.config/nvim/lua/plugins/colorscheme.lua
 return {
 

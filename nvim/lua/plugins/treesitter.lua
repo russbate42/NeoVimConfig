@@ -1,4 +1,4 @@
-print('In treesitter')
+-- print('In treesitter')
 return {
     {"nvim-treesitter/nvim-treesitter",
     branch = 'master',

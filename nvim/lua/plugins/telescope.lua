@@ -1,4 +1,4 @@
-print('In telescope')
+-- print('In telescope')
 return {
     {"nvim-telescope/telescope-fzy-native.nvim",
         submodules = true

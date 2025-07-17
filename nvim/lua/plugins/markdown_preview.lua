@@ -1,5 +1,4 @@
-print('In markdown preview')
-
+-- print('In markdown preview')
 return {
     "iamcco/markdown-preview.nvim",
     ft = { "markdown" },

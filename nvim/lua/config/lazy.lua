@@ -1,5 +1,5 @@
 
-print("In lazy module")
+-- print("In lazy module")
 
 -- Bootstrap lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"

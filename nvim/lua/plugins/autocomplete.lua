@@ -1,4 +1,4 @@
-print('In autocomplete.lua')
+-- print('In autocomplete.lua')
 return {
   "hrsh7th/nvim-cmp",
   dependencies = {

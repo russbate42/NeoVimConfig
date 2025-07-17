@@ -1,5 +1,5 @@
 
-print('In VIM Options')
+-- print('In VIM Options')
 
 vim.opt.nu = true
 vim.opt.relativenumber = true

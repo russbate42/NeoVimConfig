@@ -1,4 +1,4 @@
-print('In transparent')
+-- print('In transparent')
 return {
     {
     'tribela/transparent.nvim',

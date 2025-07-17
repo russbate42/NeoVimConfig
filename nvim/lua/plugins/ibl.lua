@@ -1,5 +1,4 @@
-print('In ibl script')
-
+-- print('In ibl script')
 return {
     {"lukas-reineke/indent-blankline.nvim",
     main = "ibl",
