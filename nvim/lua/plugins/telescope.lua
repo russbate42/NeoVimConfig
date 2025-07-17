@@ -12,10 +12,32 @@ return {
             local fzy_native = require('telescope').load_extension('fzy_native')
             tel.setup({
                 defaults = {
-                    -- Default configuration for telescope goes here:
+                    layout_strategy = "flex",
                     layout_config = {
-                        vertical = { width = 0.5 }
-                        -- other layout configuration here
+                        -- Flex will automatically switch between horizontal and vertical
+                        -- based on window size, but you can customize the breakpoints
+                        width = function(_, max_columns, _)
+                            return math.min(max_columns, 120)
+                        end,
+                        height = function(_, _, max_lines)
+                            return math.min(max_lines, 40)
+                        end,
+                        
+                        -- Custom breakpoint for switching layouts
+                        flip_columns = 100,  -- Switch to vertical when width < 100
+                        flip_lines = 20,     -- Switch to horizontal when height < 20
+                        
+                        horizontal = {
+                            width = 0.9,
+                            height = 0.8,
+                            preview_width = 0.6,
+                        },
+                        vertical = {
+                            width = 0.9,
+                            height = 0.9,
+                            preview_height = 0.6,
+                            mirror = true
+                        }
                     },
                     mappings = {
                         i = {
@@ -40,7 +62,7 @@ return {
             -- Key Mappings
             local builtin = require('telescope.builtin')
             vim.keymap.set('n', '<leader>pf', builtin.find_files, {})
-            vim.keymap.set('n', '<leader>gi', builtin.git_files, {})
+            vim.keymap.set('n', '<leader>pg', builtin.git_files, {})
             vim.keymap.set('n', '<leader>ps', function()
                 builtin.grep_string({ search = vim.fn.input("Grep > ") });
             end)
