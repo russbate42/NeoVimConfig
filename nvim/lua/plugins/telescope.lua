@@ -36,9 +36,15 @@ return {
                             width = 0.9,
                             height = 0.9,
                             preview_height = 0.6,
+                            preview_cutoff = 0,
                             mirror = true
-                        }
+                        },
                     },
+                    -- Force preview to be enabled globally
+                    -- preview = {
+                    --     check_mime_type = false,
+                    --     timeout = 250,
+                    -- },
                     mappings = {
                         i = {
                             ["<C-h>"] = "which_key",
@@ -51,7 +57,13 @@ return {
                         }
                     }
                 },
-                pickers = {},
+                pickers = {
+                    marks = {
+                        preview = true,
+                        sort_lastused = true,
+                        layout_strategy = "flex",
+                    },
+                },
                 extensions = { fzy_native = {
                     override_generic_sorter = false,
                     override_file_sorter = true,
@@ -67,7 +79,11 @@ return {
                 builtin.grep_string({ search = vim.fn.input("Grep > ") });
             end)
 
-            -- Making it look cool
+            -- Marks
+            vim.keymap.set('n', '<leader>pm', builtin.marks,
+                { desc = 'Search marks' })
+
+            -- Making it look cool (transparent)
             vim.api.nvim_set_hl(0, "TelescopeNormal", { bg = "none" })
             vim.api.nvim_set_hl(0, "TelescopeBorder", { bg = "none" })
             vim.api.nvim_set_hl(0, "TelescopePromptNormal", { bg = "none" })

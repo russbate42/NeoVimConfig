@@ -165,6 +165,11 @@ These are auto-loaded in colorscheme.lua
 ### Motions
 Here are the essential screen scrolling hotkeys in Neovim:
 
+#### Writing
+Navigate paragraphs with `}` and `{`.
+
+Reformat current line with `gqq`, or the content under visual selection with `gq`. This will respect the `textwidth` variable.
+
 #### Scrolling
 **Basic Scrolling:**
 - `Ctrl-f` - Scroll forward (down) one full screen
