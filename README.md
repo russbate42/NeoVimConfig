@@ -21,27 +21,31 @@ Run "nvim -V1 -v" for more info
 ```
 
 ### Setup Local
-Make sure all packages are installed
+Run the following commands in order:
+Make sure all recommended packages are installed. NeoVim may still work without
+these packages but for best results make sure your system has them available.
 
 **Recommended Packages**
 ```bash
 sudo apt install nodejs npm
 sudo npm install -g neovim
 cargo install ripgrep
+cargo install tree-sitter-cli
 sudo apt install luarocks
 ```
+
 For LSP compatibility with python
 ```bash
 npm install -g pyright
 ```
 
-In addition, make sure a basic python3 installation is set up.
-
-Run the following commands in order:
-
-`source setup_nvim.sh`
+In addition, make sure a basic python3 installation is set up. Install the
+pynvim pacakge with pip or conda `pip install pynvim` or if it is already
+installed: `pip install pynvim --upgrade`
 
 **Optional** Alias the neovim appimage to something like `nv` or `nvim`.
+
+`source setup_nvim.sh`
 
 ## Development
 **Reminder** When creating new plugin files run `source setup_nvim.sh`
@@ -71,22 +75,15 @@ Just basic, we can add more features later.
 **LuaSnips**
 
 **nvim-cmp**
+
 **VimTeX**
 
-#### Available Color Schemes
-These are auto-loaded in colorscheme.lua
- - tokyonight
- - catppuccin
- - gruvbox
- - nord
- - nightfox
- - rose-pine
- - kanagawa
- - onedark
+**Telescope**
+
+**Harpoon2**
 
 #### Package Wish List
- - Telescope
- - Harpoon2
+ - Vim Fugutive
  - Undo-tree
  - nvim gpt
 
@@ -107,21 +104,63 @@ These are auto-loaded in colorscheme.lua
 ### Structure
 This neovim config uses the following structure:
 ```bash
+├── clean_nvim.sh
 ├── nvim
-│   ├── after
 │   ├── init.lua
-│   └── lua
-│       ├── config
-│       │   ├── autocmds.lua
-│       │   ├── init.lua
-│       │   ├── keymaps.lua
-│       │   ├── lazy.lua
-│       │   └── options.lua
-│       └── plugins
-│           └── init.lua
+│   ├── lua
+│   │   ├── config
+│   │   │   ├── autocmds.lua
+│   │   │   ├── init.lua
+│   │   │   ├── keymaps.lua
+│   │   │   ├── lazy.lua
+│   │   │   └── options.lua
+│   │   └── plugins
+│   │       ├── autocomplete.lua
+│   │       ├── colorscheme.lua
+│   │       ├── harpoon.lua
+│   │       ├── ibl.lua
+│   │       ├── init.lua
+│   │       ├── luasnip.lua
+│   │       ├── markdown_preview.lua
+│   │       ├── telescope.lua
+│   │       ├── transparent.lua
+│   │       ├── treesitter.lua
+│   │       └── vimtex.lua
+│   └── LuaSnip
+│       ├── all.lua
+│       ├── cpp.lua
+│       ├── lua.lua
+│       ├── markdown.lua
+│       ├── python.lua
+│       ├── tex
+│       │   ├── delimiters.lua
+│       │   ├── documents.lua
+│       │   ├── environments.lua
+│       │   ├── figures.lua
+│       │   ├── fonts.lua
+│       │   ├── general.lua
+│       │   ├── math.lua
+│       │   ├── physics.lua
+│       │   └── sections.lua
+│       └── texput.log
+├── README.md
+└── setup_nvim.sh
 ```
 
 ## User
+
+### Available Color Schemes
+These are auto-loaded in colorscheme.lua
+ - tokyonight
+ - catppuccin
+ - gruvbox
+ - nord
+ - nightfox
+ - rose-pine
+ - kanagawa
+ - onedark
+
+### Package Specific commands
 
 ### Motions
 Here are the essential screen scrolling hotkeys in Neovim:
