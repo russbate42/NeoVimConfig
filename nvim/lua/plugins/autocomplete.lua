@@ -19,11 +19,17 @@ return {
         end,
       },
       mapping = cmp.mapping.preset.insert({
+        -- Open menu
+        ['<C-Space>'] = cmp.mapping.complete(),
+
+        -- Scroll Menu
         ["<C-j>"] = cmp.mapping.scroll_docs(-4),
         ["<C-k>"] = cmp.mapping.scroll_docs(4),
         ["<C-Space>"] = cmp.mapping.complete(),
         ["<C-c>"] = cmp.mapping.close(),
         ["<C-e>"] = cmp.mapping.abort(),
+
+        -- confirmation
         ["<CR>"] = cmp.mapping.confirm({
           behavior = cmp.ConfirmBehavior.Replace,
           select = true,
@@ -49,19 +55,28 @@ return {
         end, { 'i', 's' }),
       }),
       sources = cmp.config.sources({
-        { name = 'nvim_lsp' },
-        { name = 'luasnip' }, -- For luasnip users.
-        { name = 'buffer' },
-        { name = 'path' },
+        { name = 'nvim_lsp',
+          trigger_characters = {},
+          keyword_length = 1,
+        },
+        { name = 'luasnip',
+          trigger_characters = {},
+          keyword_length = 1,}, -- For luasnip users.
+        { name = 'buffer',
+          trigger_characters = { 'buff' },
+          keyword_length = 3,},
+        { name = 'path',
+          trigger_characters = { '/' },
+          keyword_length = 1,},
       }),
 
-    -- Use buffer source for `/` and `?` (if you enabled `native_menu`, this won't work anymore).
-    cmp.setup.cmdline({ '/', '?' }, {
-      mapping = cmp.mapping.preset.cmdline(),
-      sources = {
-        { name = 'buffer' }
-      }
-    })
+      -- Use buffer source for `/` and `?` (if you enabled `native_menu`, this won't work anymore).
+      cmp.setup.cmdline({ '/', '?' }, {
+        mapping = cmp.mapping.preset.cmdline(),
+        sources = {
+          { name = 'buffer' }
+        }
+      }),
 
     -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
     -- cmp.setup.cmdline(':', {
@@ -79,6 +94,24 @@ return {
     --     { name = 'buffer' },
     --     })
     -- })
+
+    -- LaTeX-specific overrides
+      cmp.setup.filetype('tex', {
+        sources = cmp.config.sources({
+          { name = 'luasnip', keyword_length = 1 },  -- Snippets auto-trigger
+          { name = 'buffer', keyword_length = 12 },  -- Buffer manual only
+          { name = 'path' },
+        })
+      }),
+
+    -- Markdown-specific overrides
+      cmp.setup.filetype('md', {
+        sources = cmp.config.sources({
+          { name = 'luasnip', keyword_length = 1 },  -- Snippets auto-trigger
+          { name = 'buffer', keyword_length = 12 },  -- Buffer manual only
+          { name = 'path' },
+        })
+      })
     })
   end,
 }
