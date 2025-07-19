@@ -14,3 +14,8 @@ vim.opt.smartindent = true
 vim.opt.wrap = true
 vim.opt.textwidth = 80
 
+-- Folding options
+vim.opt.foldmethod = "manual" -- can be indent for automatic folding
+vim.opt.foldlevel = 2        -- Start with some folds open
+vim.opt.foldnestmax = 3      -- Limit fold depth
+

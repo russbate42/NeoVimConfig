@@ -163,7 +163,18 @@ These are auto-loaded in colorscheme.lua
 ### Package Specific commands
 
 ### Motions
-Here are the essential screen scrolling hotkeys in Neovim:
+
+#### Folding
+Helpful for debugging with bracket errors
+
+- `zo` - Open fold under cursor
+- `zc` - Close fold under cursor
+- `za` - Toggle fold under cursor
+- `zR` - Open all folds
+- `zM` - Close all folds
+- `zj/zk` - Jump to next/previous fold
+
+Folds can also be created by highlighting lines and pressing `zf`
 
 #### Writing
 Navigate paragraphs with `}` and `{`.
@@ -171,6 +182,7 @@ Navigate paragraphs with `}` and `{`.
 Reformat current line with `gqq`, or the content under visual selection with `gq`. This will respect the `textwidth` variable.
 
 #### Scrolling
+Here are the essential screen scrolling hotkeys in Neovim:
 **Basic Scrolling:**
 - `Ctrl-f` - Scroll forward (down) one full screen
 - `Ctrl-b` - Scroll backward (up) one full screen
