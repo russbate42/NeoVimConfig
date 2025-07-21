@@ -161,6 +161,15 @@ These are auto-loaded in colorscheme.lua
  - onedark
 
 ### Package Specific commands
+#### Autocomplete
+`<C-space>` will open the autocomplete menu.
+
+#### Telescope
+`<leader>pc` Choose colors IN REAL TIME HOW COOL IS THAT!?
+`<leader>pb` Fuzzy find current buffer.
+`<leader>pf` Fuzzy find current directory and down for files.
+`<leader>pg` Fuzzy find all git files in current directory.
+`<leader>pg` Search through saved markers.
 
 ### Motions
 

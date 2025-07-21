@@ -12,6 +12,7 @@ return {
             local fzy_native = require('telescope').load_extension('fzy_native')
             tel.setup({
                 defaults = {
+                    winblend = 15,
                     layout_strategy = "flex",
                     layout_config = {
                         -- Flex will automatically switch between horizontal and vertical
@@ -59,9 +60,25 @@ return {
                 },
                 pickers = {
                     marks = {
-                        preview = true,
+                        previewer = true,
+                        -- "ascending" or "descending"
+                        sorting_strategy = "ascending",
                         sort_lastused = true,
                         layout_strategy = "flex",
+                    },
+                    current_buffer_fuzzy_find = {
+                        previewer = true,
+                        sorting_strategy = "ascending",
+                        layout_strategy = "flex",
+                        skip_empty_lines = true,
+                        -- or "respect_case", "smart_case"
+                        case_mode = "ignore_case",
+                    },
+                    colorscheme = {
+                        enable_preview = true,
+                        -- theme = "dropdown",
+                        layout_strategy = "flex",
+                        previewer = true,
                     },
                 },
                 extensions = { fzy_native = {
@@ -82,6 +99,14 @@ return {
             -- Marks
             vim.keymap.set('n', '<leader>pm', builtin.marks,
                 { desc = 'Search marks' })
+
+            -- Buffer fuzzy find
+            vim.keymap.set('n', '<leader>pb', builtin.current_buffer_fuzzy_find,
+                { desc = 'Current Buffer Fuzzy Find' })
+
+            -- Colorscheme
+            vim.keymap.set('n', '<leader>pc', builtin.colorscheme,
+                { desc = 'Colorscheme' })
 
             -- Making it look cool (transparent)
             vim.api.nvim_set_hl(0, "TelescopeNormal", { bg = "none" })
