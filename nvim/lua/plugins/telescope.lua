@@ -41,11 +41,6 @@ return {
                             mirror = true
                         },
                     },
-                    -- Force preview to be enabled globally
-                    -- preview = {
-                    --     check_mime_type = false,
-                    --     timeout = 250,
-                    -- },
                     mappings = {
                         i = {
                             ["<C-h>"] = "which_key",
@@ -80,6 +75,12 @@ return {
                         layout_strategy = "flex",
                         previewer = true,
                     },
+                    grep_string = {
+                        previewer = true,
+                        layout_strategy = "flex",
+                        only_sort_text = true,
+                        word_match = "-w",
+                    }
                 },
                 extensions = { fzy_native = {
                     override_generic_sorter = false,
@@ -93,7 +94,7 @@ return {
             vim.keymap.set('n', '<leader>pf', builtin.find_files, {})
             vim.keymap.set('n', '<leader>pg', builtin.git_files, {})
             vim.keymap.set('n', '<leader>ps', function()
-                builtin.grep_string({ search = vim.fn.input("Grep > ") });
+                builtin.grep_string({ search = vim.fn.input("Grep > ") })
             end)
 
             -- Marks

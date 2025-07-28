@@ -148,6 +148,21 @@ This neovim config uses the following structure:
 ```
 
 ## User
+### Gentle Introduction to Vim
+`:q` to exit vim, or see [This
+tutorial](https://github.com/hakluke/how-to-exit-vim)
+
+### Windowing
+ - `:split` for a hotizontal split
+ - `:vsplit` for a vertical split
+ - `C-w <h/j/k/l>` to move between panes 
+ - `C-w <Left/Down/Up/Right>` to move between panes 
+ - `C-w <H/J/K/L>` to swap panes 
+ - `C-w +/-` increase/decrease height (ex. `20<C-w>+`)
+ - `C-w >/<` increase/decrease width (ex. `30<C-w><`)
+ - `C-w _` set height (ex. `50<C-w>_`)
+ - `C-w |` set width (ex. `50<C-w>|`)
+ - `C-w =` equalize width and height of all windows
 
 ### Available Color Schemes
 These are auto-loaded in colorscheme.lua
@@ -172,6 +187,52 @@ These are auto-loaded in colorscheme.lua
 `<leader>pg` Search through saved markers.
 
 ### Motions
+
+#### Horizontal Motions
+- `f` jump cursor forward to character
+- `F` jump cursor backward to character
+- `t` jump cursor forward, stop before character
+- `T` jump cursor backward, stop before character
+- `g_` jump to last character in line
+- `$` jump to end of line
+- `^` jump to end first non-white character (start of indent)
+
+#### Vertical Motions
+- `gg` jump to top of file
+- `G` jump to bottom of file
+
+#### General
+- `s` delete characters under cursor and start typing. Works in normal, visual,
+- `r` replace character with what you type next. Works in visual block mode.
+- `R` replace all characters as typed. Also known as overtype.
+- `o` insert new line below and start in insert mode
+- `O` insert new line above and start in insert mode
+- `I` when in visual block mode to insert multiple characters at once
+`gqq` to split lines to whatever text width is. Works in visual line mode as
+well.
+- `dd` delete line
+- `dk` delete line above
+- `dj` delete line below
+- `.` repeat last action
+- `>>` indent line. Use single `>` if in visual line mode.
+- `=` match indetation when in visual line mode.
+
+#### Cursor and Marks
+- `~` Change case of character under cursor or visually selected
+- `o` insert new line below and start in insert mode
+- `O` insert new line above and start in insert mode
+- `\`\`` jump to last cursor location
+
+#### Copy and Paste (Yank and Put)
+- `o` insert new line below and start in insert mode
+- `O` insert new line above and start in insert mode
+
+#### Macros
+- `q` to start recording a macro. Macros record all keystrokes for later
+repeats. Macros are saved in the "key register" (available key)
+- `<registered key>` to repeat the macro
+- `<n><registered key>` to repeat the macro n times. For example if a macro is
+recorded in 'r', `5@r` will repeat this macro five times.
 
 #### Folding
 Helpful for debugging with bracket errors
