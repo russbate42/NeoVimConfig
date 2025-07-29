@@ -12,10 +12,37 @@ return {
 
         -- Enable folding
         vim.g.vimtex_fold_enabled = 1
+
+        -- quickfix menu options
+        -- Don't auto-open quickfix on warnings, only on errors
+        vim.g.vimtex_quickfix_open_on_warning = 0
+
+        -- Don't auto-focus the quickfix window when it opens
+        vim.g.vimtex_quickfix_autoclose_after_keystrokes = 0
     end,
 
     config = function()
+
+        -- VimTeX concealment
+        vim.g.vimtex_syntax_conceal = {
+            accents = 1,
+            ligatures = 1, 
+            cites = 1,
+            fancy = 1,
+            spacing = 1,
+            greek = 1,  -- Enable Greek letter concealment
+            math_bounds = 1,
+            math_delimiters = 1,
+            math_fracs = 1,
+            math_super_sub = 1,
+            math_symbols = 1,
+            sections = 0,
+            styles = 1,
+        }
         
+        -- Recent change highlighting
+        vim.g.vimtex_matchparen_enabled = 0
+
         -- Set up folding with proper timing
         vim.api.nvim_create_autocmd("FileType", {
             pattern = "tex",

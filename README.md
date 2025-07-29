@@ -186,6 +186,16 @@ These are auto-loaded in colorscheme.lua
 `<leader>pg` Fuzzy find all git files in current directory.
 `<leader>pg` Search through saved markers.
 
+#### VimTeX
+`<leader>tc` Toggle conceal for math symbols.
+`<leader>lv` View output.
+`<leader>lc` Compile.
+`<leader>ll` Compile and view.
+
+`:cw` quickfix menu toggle
+`:copen` quickfix menu open
+`:cclose` quickfix menu close
+
 ### Motions
 
 #### Horizontal Motions
