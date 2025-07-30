@@ -82,9 +82,18 @@ return {
                         word_match = "-w",
                     }
                 },
-                extensions = { fzy_native = {
-                    override_generic_sorter = false,
-                    override_file_sorter = true,
+                extensions = {
+                    fzy_native = {
+                        override_generic_sorter = false,
+                        override_file_sorter = true,
+                    },
+                    bibtex = {
+                        -- Use context awareness
+                        context = true,
+                        -- Use non-contextual behavior if no context found
+                        -- This setting has no effect if context = false
+                        context_fallback = true,
+                        search_keys = { 'label', 'title', 'year', 'author', 'publisher' }
                     }
                 }
             })

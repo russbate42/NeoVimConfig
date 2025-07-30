@@ -180,12 +180,14 @@ These are auto-loaded in colorscheme.lua
 `<C-space>` will open the autocomplete menu.
 
 #### Telescope
-`<leader>pc` Choose colors IN REAL TIME HOW COOL IS THAT!?
-`<leader>pb` Fuzzy find current buffer.
-`<leader>pf` Fuzzy find current directory and down for files.
-`<leader>pg` Fuzzy find all git files in current directory.
-`<leader>pg` Search through saved markers.
-
+- `<leader>pc` Choose colors IN REAL TIME HOW COOL IS THAT!?
+- `<leader>pb` Fuzzy find current buffer.
+- `<leader>pf` Fuzzy find current directory and down for files.
+- `<leader>pg` Fuzzy find all git files in current directory.
+- `<leader>pg` Search through saved markers.
+- `<leader>bi` Search through bibliography.
+- - `<C-e>` Put whole citation down
+- - `<C-c>` Put citation title down
 #### VimTeX
 `<leader>tc` Toggle conceal for math symbols.
 `<leader>lv` View output.

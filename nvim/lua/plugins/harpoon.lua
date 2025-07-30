@@ -12,7 +12,7 @@ return {
         -- REQUIRED
         harpoon:setup()
 
-        -- REQUIRED
+        -- HARPOON KEYMAPS
         vim.keymap.set("n", "<leader>add", function() harpoon:list():add() end)
         vim.keymap.set("n", "<leader>rem", function() harpoon:list():remove() end)
         vim.keymap.set("n", "<M-e>", function()
