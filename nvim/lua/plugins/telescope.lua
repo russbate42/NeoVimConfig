@@ -80,6 +80,12 @@ return {
                         layout_strategy = "flex",
                         only_sort_text = true,
                         word_match = "-w",
+                    },
+                    oldfiles = {
+                        prompt_title = "Recent Files",
+                        cwd_only = false,
+                        layout_strategy = "flex",
+                        previewer = true
                     }
                 },
                 extensions = {
@@ -108,7 +114,11 @@ return {
 
             -- Marks
             vim.keymap.set('n', '<leader>pm', builtin.marks,
-                { desc = 'Search marks' })
+                { desc = 'Search Marks' })
+
+            -- Old Files
+            vim.keymap.set('n', '<leader>po', '<cmd>Telescope oldfiles<cr>',
+                { desc = 'Find Recent Files'} )
 
             -- Buffer fuzzy find
             vim.keymap.set('n', '<leader>pb', builtin.current_buffer_fuzzy_find,

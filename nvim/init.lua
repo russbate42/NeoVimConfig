@@ -1,4 +1,7 @@
 
+-- vim.opt.shortmess:append("sIcFW")  -- Suppress various messages
+-- vim.opt.cmdheight = 0              -- Hide command line (Neovim 0.8+)
+
 print('NeoVim main init.lua loading..')
 print('')
 print("For spelling type >>> :setlocal spell spelllang=en_us")
