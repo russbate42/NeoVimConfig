@@ -19,6 +19,14 @@ return {
 
         -- Don't auto-focus the quickfix window when it opens
         vim.g.vimtex_quickfix_autoclose_after_keystrokes = 0
+
+        -- Enable completion
+        vim.g.vimtex_complete_enabled = 1
+        vim.g.vimtex_complete_close_braces = 1
+        
+        -- Disable some features for better performance if needed
+        vim.g.vimtex_syntax_enabled = 1
+        vim.g.vimtex_indent_enabled = 1
     end,
 
     config = function()

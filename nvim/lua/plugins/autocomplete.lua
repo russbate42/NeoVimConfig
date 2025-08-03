@@ -1,11 +1,21 @@
 -- print('In autocomplete.lua')
 return {
+  -- VimTeX completion source for nvim-cmp
+  {
+    'micangl/cmp-vimtex',
+    dependencies = { 'lervag/vimtex', 'hrsh7th/nvim-cmp' },
+    ft = 'tex',
+  },
+
+  {
   "hrsh7th/nvim-cmp",
   dependencies = {
     "hrsh7th/cmp-nvim-lsp",
     "hrsh7th/cmp-buffer",
+    'hrsh7th/cmp-omni',
     "hrsh7th/cmp-path",
     "hrsh7th/cmp-cmdline",
+    "micangl/cmp-vimtex",
     "L3MON4D3/LuaSnip",
     "saadparwaiz1/cmp_luasnip",
   },
@@ -15,7 +25,7 @@ return {
     cmp.setup({
       snippet = {
         expand = function(args)
-          require("luasnip").lsp_expand(args.body)
+          luasnip.lsp_expand(args.body)
         end,
       },
       mapping = cmp.mapping.preset.insert({
@@ -66,13 +76,16 @@ return {
         },
         { name = 'luasnip',
           trigger_characters = {},
-          keyword_length = 1,}, -- For luasnip users.
+          keyword_length = 1,
+        }, -- For luasnip users.
         { name = 'buffer',
           trigger_characters = { 'buff' },
-          keyword_length = 3,},
+          keyword_length = 3,
+        },
         { name = 'path',
           trigger_characters = { '/' },
-          keyword_length = 1,},
+          keyword_length = 1,
+        },
       }),
 
       -- Use buffer source for `/` and `?` (if you enabled `native_menu`, this won't work anymore).
@@ -100,23 +113,60 @@ return {
     --     })
     -- })
 
+    })
+
+    -- Set up omnifunc for tex files as fallback
+    vim.api.nvim_create_autocmd('FileType', {
+      pattern = 'tex',
+      callback = function()
+        vim.opt_local.omnifunc = 'vimtex#complete#omnifunc'
+      end,
+    })
+
     -- LaTeX-specific overrides
-      cmp.setup.filetype('tex', {
-        sources = cmp.config.sources({
-          { name = 'luasnip', keyword_length = 1 },  -- Snippets auto-trigger
-          { name = 'buffer', keyword_length = 12 },  -- Buffer manual only
-          { name = 'path' },
-        })
+    cmp.setup.filetype('tex', {
+      sources = cmp.config.sources({
+        { name = 'vimtex',
+          option = {
+            -- Configure what types of completions to show
+            info_in_menu = true,
+            info_in_window = true,
+            info_max_length = 60,
+            match_against_info = true,
+            symbols_in_menu = true,
+          },
+        },
+        { name = 'omni' },      -- Fallback to VimTeX omnifunc
+        { name = 'luasnip', keyword_length = 1 },  -- Snippets auto-trigger
+        { name = 'buffer', keyword_length = 12 },  -- Buffer manual only
+        { name = 'path' },
       }),
 
+      -- LaTeX-specific formatting
+      formatting = {
+        format = function(entry, vim_item)
+          -- Add source name to the menu
+          vim_item.menu = ({
+            vimtex = '[VimTeX]',
+            omni = '[Omni]',
+            luasnip = '[Snippet]',
+            buffer = '[Buffer]',
+            path = '[Path]',
+          })[entry.source.name]
+          return vim_item
+        end,
+      }
+    })
+
     -- Markdown-specific overrides
-      cmp.setup.filetype('md', {
-        sources = cmp.config.sources({
-          { name = 'luasnip', keyword_length = 1 },  -- Snippets auto-trigger
-          { name = 'buffer', keyword_length = 12 },  -- Buffer manual only
-          { name = 'path' },
-        })
+    cmp.setup.filetype('md', {
+      sources = cmp.config.sources({
+        { name = 'luasnip', keyword_length = 1 },  -- Snippets auto-trigger
+        { name = 'buffer', keyword_length = 12 },  -- Buffer manual only
+        { name = 'path' },
       })
     })
+
   end,
+  },
 }
