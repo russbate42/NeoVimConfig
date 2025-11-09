@@ -1,3 +1,8 @@
+local ls = require("luasnip")
+local s = ls.snippet
+local i = ls.insert_node
+local t = ls.text_node
+local fmta = require("luasnip.extras.fmt").fmta
 
 return {
 
@@ -6,8 +11,8 @@ return {
     { strict = false }
     )),
 
-    s("fs", fmta([[f'{<>}']],
-    { i(1, "variable") },
+    s("fs", fmta([[f'<> {<>}']],
+    { i(1, "var"), i(2, "var") },
     { strict = false }
     )),
 

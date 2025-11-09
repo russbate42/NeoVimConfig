@@ -1,10 +1,16 @@
+local ls = require("luasnip")
+local s = ls.snippet
+local i = ls.insert_node
+local t = ls.text_node
+local fmta = require("luasnip.extras.fmt").fmta
+
 return {
 
   s("figure", fmta(
     [[
     \begin{figure}[<>]
         \centering
-        \includegraphics[width=0.5\textwidth]{<>}
+        \includegraphics[width=0.48\textwidth]{<>}
         \caption{<>}
         \label{<>}
     \end{figure}
@@ -39,12 +45,12 @@ return {
     ]],
     { i(1, "placement(h|t|b|p|!|H)"),
       i(2, "placement(h|t|b|p|!|H)"),
-      i(3, ".5\\textwidth"),
+      i(3, ".48\\textwidth"),
       i(4, "figurename"),
       i(5, "figure caption"),
       i(6, "subfig:figurename"),
       i(7, "placement(h|t|b|p|!|H)"),
-      i(8, ".5\\textwidth"),
+      i(8, ".48\\textwidth"),
       i(9, "figurename"),
       i(10, "figure caption"),
       i(11, "subfig:figurename"),
@@ -91,7 +97,7 @@ return {
     ]],
     { i(1, "placement(h|t|b|p|!|H)"),
       i(2, "placement(h|t|b|p|!|H)"),
-      i(3, ".5\\textwidth"),
+      i(3, ".48\\textwidth"),
       i(4, "figurename"),
       i(5, "figure caption"),
       i(6, "subfig:figurename"),
@@ -111,7 +117,7 @@ return {
     ]],
     { i(1, "lineheight (can leave out)"),
       i(2, "placement(r|l|i|o)"),
-      i(3, "0.5\\textwidth"),
+      i(3, "0.48\\textwidth"),
       i(4, "width=0.48\\textwidth"),
       i(5, "figurename"),
       i(6, "figure caption"),
