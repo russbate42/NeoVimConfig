@@ -20,10 +20,9 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
-
 -- Treesitter folding for multiple languages
 vim.api.nvim_create_autocmd("FileType", {
-  pattern = { "python", "lua" },
+  pattern = { "python", "lua", "bibtex" },
   callback = function()
     local ft = vim.bo.filetype
 
@@ -33,13 +32,14 @@ vim.api.nvim_create_autocmd("FileType", {
     end)
 
     if has_treesitter_fold then
-      -- Use Treesitter folding
-      vim.opt_local.foldmethod = 'expr'
+      -- Use Treesitter folding vim.opt_local.foldmethod = 'expr'
       vim.opt_local.foldexpr = 'nvim_treesitter#foldexpr()'
       
       -- Set language-specific fold levels
       if ft == "python" then
         vim.opt_local.foldlevelstart = 2
+      elseif ft == "bibtex" then
+        vim.opt_local.foldlevelstart = 1
       else
         vim.opt_local.foldlevelstart = 1
       end
@@ -59,7 +59,7 @@ vim.api.nvim_create_autocmd("FileType", {
         vim.opt_local.foldnestmax = 10
       end
     end
-  end,
+  end
 })
 
 -- Other autocommands...
