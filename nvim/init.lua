@@ -11,7 +11,7 @@ print('')
 print('Loading custom configurations ..')
 require('config')
 
-vim.cmd([[colorscheme rose-pine]])
+vim.cmd([[colorscheme unokai]])
 
 print('Done loading configs and plugins ..')
 

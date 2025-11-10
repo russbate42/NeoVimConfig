@@ -51,7 +51,7 @@ return {
         ['<S-Tab>'] = cmp.mapping(function(fallback)
           if cmp.visible() then
             cmp.select_prev_item()
-          elseif luasnip.jumpable(-1) then
+          elseif luasnip.locally_jumpable(-1) then
             luasnip.jump(-1)
           else
             fallback()
@@ -73,18 +73,22 @@ return {
         { name = 'nvim_lsp',
           trigger_characters = {},
           keyword_length = 1,
+          priority = 900
         },
         { name = 'luasnip',
           trigger_characters = {},
           keyword_length = 1,
+          priority = 1000
         }, -- For luasnip users.
         { name = 'buffer',
           trigger_characters = { 'buff' },
           keyword_length = 3,
+          priority = 500
         },
         { name = 'path',
           trigger_characters = { '/' },
           keyword_length = 1,
+          priority = 400
         },
       }),
 
@@ -123,6 +127,42 @@ return {
       end,
     })
 
+            -- Old cursor leave trigger
+    -- vim.api.nvim_create_autocmd({"CursorMoved"}, {
+    --   callback = function()
+    --     if luasnip.session.current_nodes[vim.api.nvim_get_current_buf()]
+    --                     and not luasnip.session.jump_active then
+    --       luasnip.unlink_current()
+    --     end
+    --   end
+    -- })
+
+            -- New improved unlinking
+    vim.api.nvim_create_autocmd({"InsertLeave"}, {
+      callback = function(event)
+        -- for insert leave
+        local buf = vim.api.nvim_get_current_buf()
+        if luasnip.session.current_nodes[vim.api.nvim_get_current_buf()]
+                        and not luasnip.session.jump_active then
+            while luasnip.session.current_nodes[buf] do
+              luasnip.unlink_current()
+            end
+          print('Unlinking via InsertLeave')
+        end
+      end
+    })
+
+            -- BufLeave, don't need this as InsertLeave works.
+    -- vim.api.nvim_create_autocmd({"BufLeave"}, {
+    --   callback = function(event)
+    --     local buf = event.buf
+    --     if luasnip.session.current_nodes[buf] then
+    --       luasnip.unlink_current()
+    --       print('Unlinking via buf leave')
+    --     end
+    --   end
+    -- })
+
     -- LaTeX-specific overrides
     cmp.setup.filetype('tex', {
       sources = cmp.config.sources({
@@ -134,12 +174,17 @@ return {
             info_max_length = 60,
             match_against_info = true,
             symbols_in_menu = true,
+            -- Disable automatic brace completion
+            complete_closing_braces = false,
+            -- Or configure brace handling
+            -- brace_balance = false,
+            priority = 800
           },
         },
-        { name = 'omni' },      -- Fallback to VimTeX omnifunc
-        { name = 'luasnip', keyword_length = 1 },  -- Snippets auto-trigger
-        { name = 'buffer', keyword_length = 12 },  -- Buffer manual only
-        { name = 'path' },
+        { name = 'omni', priority = 100 },      -- Fallback to VimTeX omnifunc
+        { name = 'luasnip', keyword_length = 1, priority = 1000 }, -- Snippets auto-trigger
+        { name = 'buffer', keyword_length = 6, priority = 900 },  -- Buffer manual only
+        { name = 'path', priority = 300 },
       }),
 
       -- LaTeX-specific formatting
@@ -161,8 +206,8 @@ return {
     -- Markdown-specific overrides
     cmp.setup.filetype('md', {
       sources = cmp.config.sources({
-        { name = 'luasnip', keyword_length = 1 },  -- Snippets auto-trigger
-        { name = 'buffer', keyword_length = 12 },  -- Buffer manual only
+        { name = 'luasnip', keyword_length = 2 },  -- Snippets auto-trigger
+        { name = 'buffer', keyword_length = 6 },  -- Buffer manual only
         { name = 'path' },
       })
     })
