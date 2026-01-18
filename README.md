@@ -25,7 +25,7 @@ Run the following commands in order:
 Make sure all recommended packages are installed. NeoVim may still work without
 these packages but for best results make sure your system has them available.
 
-**Recommended Packages**
+**Install Recommended Packages**
 ```bash
 sudo apt install nodejs npm
 sudo npm install -g neovim
@@ -34,18 +34,26 @@ cargo install tree-sitter-cli
 sudo apt install luarocks
 ```
 
-For LSP compatibility with python
-```bash
-npm install -g pyright
-```
-
 In addition, make sure a basic python3 installation is set up. Install the
 pynvim pacakge with pip or conda `pip install pynvim` or if it is already
 installed: `pip install pynvim --upgrade`
 
 **Optional** Alias the neovim appimage to something like `nv` or `nvim`.
 
+Finally, run the setup script.
 `source setup_nvim.sh`
+
+If the LSP server does not work, you may have an outdated version of node. Check
+`node --version`. Neovim LSP requries `Node.js 14+`. To update on Ubuntu, run
+```bash
+sudo apt-get remove --purge libnode-dev nodejs npm
+sudo apt-get autoremove
+curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
+sudo apt-get update
+sudo apt-get install -y nodejs
+node --version
+npm --version
+```
 
 ## Development
 **Reminder** When creating new plugin files run `source setup_nvim.sh`
@@ -88,13 +96,11 @@ Just basic, we can add more features later.
  - nvim gpt
 
 ### To Do
-#### In Order
- - [ ] Telescope
- - [ ] Harpoon2
- - [ ] Update nvim-cmp with LSP features
- - - [ ] install pyright
-
-#### Unordered
+ - [x] Telescope
+ - [x] Harpoon2
+ - [x] Update nvim-cmp with LSP features
+ - - [x] install pyright
+ - [ ] Install vim fugitive & other git helpers
  - [ ] Install an AI client
 
 ### Recent Changes
@@ -149,8 +155,64 @@ This neovim config uses the following structure:
 
 ## User
 ### Gentle Introduction to Vim
+Vim is a text editor which aims to improve typing efficiency. The user interacts
+with the text through [motions](#motions) (fast ways of jumping the cursor
+around), modes, and many other tricks. Modes are displayed on the bottom left,
+unless you are in normal mode which will desplay nothing. `Esc` Will always
+return you to normal mode. The modes are outlined below, and commands to enter
+modes will always assume normal mode to start.
+
+**Normal**
+This is the Vim default. All motions are available. Navigate using `h,j,k,l`.
+See [motions](#motions).
+
+**Insert**
+You are already familiar with insert mode. Assume every text editor you
+have used so far in your life is stuck in insert mode. When a user types,
+characters are added at the position of the cursor. To start with, you can
+simply use Vim like the editors you are used to and type normally. As you learn
+vim shortcuts, this will require you to exit insert mode and leverage other
+modes. Motions are only available _outside_ of insert mode.
+`i` to insert at _the start_ of the cursor.
+`a` to insert at _the end_ of the cursor.
+`cc` delete line and enter insert mode at the beginning.
+
+**Visual-Line**
+Use this for selecting lines. `S-V`.
+
+**Visual**
+Like visual line, but used to select sequential text, from substrings of lines
+to multiline. `v`
+
+**Visual-Block**
+Use to select rectangular chunks of code. `C-V` Be warned, pasting from yanked
+blocks will overwrite. In other words, pasting does not create new lines.
+
+**Replace**
+This is an overtype mode. `S-R` Typing will replace characters as needed.
+Motions not available.
+
+Vim power-users leverage modes with motions to move text around in the most
+efficient way.
+
 `:q` to exit vim, or see [This
 tutorial](https://github.com/hakluke/how-to-exit-vim)
+
+### Motions
+Motions are vimspeak for simply moving the cursor around the screen quickly.
+
+#### Horizontal Motions
+- `f` jump cursor forward to character
+- `F` jump cursor backward to character
+- `t` jump cursor forward, stop before character
+- `T` jump cursor backward, stop before character
+- `g_` jump to last character in line
+- `$` jump to end of line
+- `^` jump to end first non-white character (start of indent)
+
+#### Vertical Motions
+- `gg` jump to top of file
+- `G` jump to bottom of file
 
 ### Windowing
  - `:split` for a hotizontal split
@@ -163,17 +225,6 @@ tutorial](https://github.com/hakluke/how-to-exit-vim)
  - `C-w _` set height (ex. `50<C-w>_`)
  - `C-w |` set width (ex. `50<C-w>|`)
  - `C-w =` equalize width and height of all windows
-
-### Available Color Schemes
-These are auto-loaded in colorscheme.lua
- - tokyonight
- - catppuccin
- - gruvbox
- - nord
- - nightfox
- - rose-pine
- - kanagawa
- - onedark
 
 ### Package Specific commands
 #### Autocomplete
@@ -198,22 +249,34 @@ These are auto-loaded in colorscheme.lua
 `:copen` quickfix menu open
 `:cclose` quickfix menu close
 
-### Motions
+### LSP, Autocomplete, and AI integration
+#### Autocomplete
+Currently using nvim-cmp
 
-#### Horizontal Motions
-- `f` jump cursor forward to character
-- `F` jump cursor backward to character
-- `t` jump cursor forward, stop before character
-- `T` jump cursor backward, stop before character
-- `g_` jump to last character in line
-- `$` jump to end of line
-- `^` jump to end first non-white character (start of indent)
+#### LSP
+Currently, only a few languages are installed. To install more, there are three
+options.
+**Option 1:** Edit the `plugins/mason.lua` file to add your language. 
+```lua
+require("mason-lspconfig").setup({
+  ensure_installed = {
+    "pyright",    -- Python
+    "lua_ls",     -- Lua
+    "rust_analyzer", -- Rust
+    "<your_lsp_here>", -- New Language
+  },
+```
+**Option 2:** Use the Mason installer, see `:Mason`
+**Option 3:** Enable automatic istallation in the `plugins/mason.lua`
+```lua
+  automatic_installation = true,
+```
+currently set to false.
 
-#### Vertical Motions
-- `gg` jump to top of file
-- `G` jump to bottom of file
+#### AI Integration
+WIP
 
-#### General
+### General Vim Commands
 - `s` delete characters under cursor and start typing. Works in normal, visual,
 - `r` replace character with what you type next. Works in visual block mode.
 - `R` replace all characters as typed. Also known as overtype.
@@ -231,6 +294,8 @@ well.
 
 #### Cursor and Marks
 - `~` Change case of character under cursor or visually selected
+- `m<key>` Mark location with `<key>`
+- ``<key>` Jump to location marked with `<key>`
 - `o` insert new line below and start in insert mode
 - `O` insert new line above and start in insert mode
 - `\`\`` jump to last cursor location
@@ -298,4 +363,17 @@ Here are the essential screen scrolling hotkeys in Neovim:
 
 **Pro tip:** You can prefix most of these with numbers (e.g., `5Ctrl-e` scrolls 5 lines down).
 
-These work in normal mode. The `Ctrl-f`/`Ctrl-b` and `Ctrl-d`/`Ctrl-u` are probably the most commonly used for quick navigation!
+These work in normal mode. The `Ctrl-f`/`Ctrl-b` and `Ctrl-d`/`Ctrl-u` are
+probably the most commonly used for quick navigation!
+### Available Color Schemes
+If telescope is installed correctly, try `leader<pc>` to choose colors from a
+menu. Otherwise, these are auto-loaded in colorscheme.lua
+ - tokyonight
+ - catppuccin
+ - gruvbox
+ - nord
+ - nightfox
+ - rose-pine
+ - kanagawa
+ - onedark
+
