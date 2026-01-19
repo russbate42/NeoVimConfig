@@ -239,6 +239,7 @@ Motions are vimspeak for simply moving the cursor around the screen quickly.
 - `<leader>bi` Search through bibliography.
 - - `<C-e>` Put whole citation down
 - - `<C-c>` Put citation title down
+
 #### VimTeX
 `<leader>tc` Toggle conceal for math symbols.
 `<leader>lv` View output.
@@ -248,6 +249,10 @@ Motions are vimspeak for simply moving the cursor around the screen quickly.
 `:cw` quickfix menu toggle
 `:copen` quickfix menu open
 `:cclose` quickfix menu close
+
+#### Formatting and Linting
+`<leader>mp` Auto-format 
+`<leader>mp` Auto-format 
 
 ### LSP, Autocomplete, and AI integration
 #### Autocomplete
