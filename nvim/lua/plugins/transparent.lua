@@ -1,12 +1,24 @@
--- print('In transparent')
 return {
-    {
-    'tribela/transparent.nvim',
-    event = 'VimEnter',
-    opts = {
-        auto = true, -- Automatically applies transparent
-        extra_groups = {Lazy}, -- If you want to add some groups to be transparent. eg: { 'Pmenu', 'CocFloating' }
-        excludes = {}, -- If you want to excludes from default transparent groups. eg: { 'LineNr' }
-        }
-    }
+    "xiyaowong/transparent.nvim",
+    lazy = false, -- Critical: This plugin must load early to manage highlights
+    config = function()
+        vim.g.transparent_enabled = true
+        require("transparent").setup({
+        -- table: default groups
+        groups = {
+            'Normal', 'NormalNC', 'Comment', 'Constant', 'Special', 'Identifier',
+            'Statement', 'PreProc', 'Type', 'Underlined', 'Todo', 'String', 'Function',
+            'Conditional', 'Repeat', 'Operator', 'Structure', 'LineNr', 'NonText',
+            'SignColumn', 'CursorLine', 'CursorLineNr', 'StatusLine', 'StatusLineNC',
+            'EndOfBuffer',
+        },
+        -- table: additional groups that should be cleared
+        extra_groups = {},
+        -- table: groups you don't want to clear
+        exclude_groups = {"VirtColumn", "ColorColumn"},
+        -- function: code to be executed after highlight groups are cleared
+        -- Also the user event "TransparentClear" will be triggered
+        on_clear = function() end,
+        })
+    end,
 }
