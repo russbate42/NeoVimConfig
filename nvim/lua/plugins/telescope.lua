@@ -4,12 +4,12 @@ return {
         submodules = true
     },
 
-    {'nvim-telescope/telescope.nvim', tag = '0.1.8',
-    -- or                              , branch = '0.1.x',
-        dependencies = { 'nvim-lua/plenary.nvim' },
+    {'nvim-telescope/telescope.nvim', tag = '0.1.8', -- or branch = '0.1.x',
+        dependencies = { 'nvim-lua/plenary.nvim', 'gbprod/yanky.nvim' },
         config = function()
             local tel = require("telescope")
-            local fzy_native = require('telescope').load_extension('fzy_native')
+            tel.load_extension('fzy_native')
+            tel.load_extension('yank_history')
             tel.setup({
                 defaults = {
                     winblend = 15,
@@ -127,6 +127,10 @@ return {
             -- Colorscheme
             vim.keymap.set('n', '<leader>pc', builtin.colorscheme,
                 { desc = 'Colorscheme' })
+
+            -- Yanky
+            vim.keymap.set('n', '<leader>py', '<cmd>Telescope yank_history<cr>',
+                { desc = 'Yank History' })
 
             -- Making it look cool (transparent)
             vim.api.nvim_set_hl(0, "TelescopeNormal", { bg = "none" })
