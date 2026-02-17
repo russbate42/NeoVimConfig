@@ -32,7 +32,9 @@ sudo npm install -g neovim
 cargo install ripgrep
 cargo install tree-sitter-cli
 sudo apt install luarocks
+sudo apt install python3.10-venv
 ```
+`python3.10-venv` is required for Mason to install ruff.
 
 In addition, make sure a basic python3 installation is set up. Install the
 pynvim pacakge with pip or conda `pip install pynvim` or if it is already
@@ -54,6 +56,8 @@ sudo apt-get install -y nodejs
 node --version
 npm --version
 ```
+Note that linters and formatters are not installed automatically. Manual install
+of ruff is required `:Mason` and `i` to install ruff.
 
 ## Development
 **Reminder** When creating new plugin files run `source setup_nvim.sh`

@@ -55,14 +55,28 @@ return {
 
         -- Configure diagnostic signs
         vim.diagnostic.config({
+            -- signs = false,  -- Disable sign column icons
             signs = {
                 text = {
-                    [vim.diagnostic.severity.ERROR] = " ",
-                    [vim.diagnostic.severity.WARN] = " ",
-                    [vim.diagnostic.severity.HINT] = "󰠠 ",
-                    [vim.diagnostic.severity.INFO] = " ",
+                    -- [vim.diagnostic.severity.ERROR] = " ",
+                    -- [vim.diagnostic.severity.WARN] = " ",
+                    -- [vim.diagnostic.severity.HINT] = "󰠠 ",
+                    -- [vim.diagnostic.severity.INFO] = " ",
+                    [vim.diagnostic.severity.ERROR] = "💥",
+                    [vim.diagnostic.severity.WARN] = "⚠️",
+                    [vim.diagnostic.severity.HINT] = "💡",
+                    [vim.diagnostic.severity.INFO] = "ℹ️",
                 },
             },
         })
     end,
 }
+-- Fun signs
+-- Colorful circles
+-- ERROR = "🔴", WARN = "🟡", HINT = "🔵", INFO = "⚪"
+-- Fun
+-- ERROR = "💀", WARN = "🤔", HINT = "✨", INFO = "👀"
+-- Professional but clearer
+-- ERROR = "✘", WARN = "▲", HINT = "»", INFO = "●"
+-- Arrows
+-- ERROR = "▶", WARN = "▶", HINT = "▶", INFO = "▶"
