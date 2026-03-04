@@ -25,12 +25,23 @@ Run the following commands in order:
 Make sure all recommended packages are installed. NeoVim may still work without
 these packages but for best results make sure your system has them available.
 
-**Install Recommended Packages**
+#### Install Recommended Packages
+Some tools require the installation of Rust. It is not recommended to install
+Rust on Ubuntu with apt - it will be outdated. Use the following script:
+```bash
+sudo apt-get install -y curl
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+source ~/.cargo/env
+```
+**Rust Tools**
+```bash
+cargo install ripgrep
+cargo install tree-sitter-cli
+```
+**Additional Tools**
 ```bash
 sudo apt install nodejs npm
 sudo npm install -g neovim
-cargo install ripgrep
-cargo install tree-sitter-cli
 sudo apt install luarocks
 sudo apt install python3.10-venv
 ```
@@ -42,8 +53,10 @@ installed: `pip install pynvim --upgrade`
 
 **Optional** Alias the neovim appimage to something like `nv` or `nvim`.
 
+#### Running
 Finally, run the setup script.
 `source setup_nvim.sh`
+Run `~/nvim-linux-x86_64.appimage` or wherever you have saved/aliased to!
 
 If the LSP server does not work, you may have an outdated version of node. Check
 `node --version`. Neovim LSP requries `Node.js 14+`. To update on Ubuntu, run
@@ -61,6 +74,8 @@ of ruff is required `:Mason` and `i` to install ruff.
 
 ## Development
 **Reminder** When creating new plugin files run `source setup_nvim.sh`
+
+MRs welcome!
 
 ### Packages
 
@@ -95,21 +110,52 @@ Just basic, we can add more features later.
 **Harpoon2**
 
 #### Package Wish List
- - Vim Fugutive
- - Undo-tree
- - nvim gpt
+ - [ ] Vim Fugitive
+ - [ ] Oil
+ - [ ] Minuet
+ - [ ] Avante
 
 ### To Do
  - [x] Telescope
  - [x] Harpoon2
  - [x] Update nvim-cmp with LSP features
  - - [x] install pyright
+ - - [x] Mason
+ - - [x] Linters (Ruff)
+ - [ ] Update docs to link installed packages
+ - [ ] LuaSnip Friends (friendly snippets?)
  - [ ] Install vim fugitive & other git helpers
- - [ ] Install an AI client
 
-### Recent Changes
+#### Recent Changes
  - [x] Install nvim-cmp with LuaSnips
  - [x] VimTeX
+
+### LSP, Autocomplete, and AI integration
+#### Autocomplete
+Currently using nvim-cmp
+
+#### LSP
+Currently, only a few languages are installed. To install more, there are three
+options.
+**Option 1:** Edit the `plugins/mason.lua` file to add your language. 
+```lua
+require("mason-lspconfig").setup({
+  ensure_installed = {
+    "pyright",    -- Python
+    "lua_ls",     -- Lua
+    "rust_analyzer", -- Rust
+    "<your_lsp_here>", -- New Language
+  },
+```
+**Option 2:** Use the Mason installer, see `:Mason`
+**Option 3:** Enable automatic istallation in the `plugins/mason.lua`
+```lua
+  automatic_installation = true,
+```
+currently set to false.
+
+#### AI Integration
+WIP
 
 ### Structure
 This neovim config uses the following structure:
@@ -157,7 +203,7 @@ This neovim config uses the following structure:
 └── setup_nvim.sh
 ```
 
-## User
+## User Manual
 ### Gentle Introduction to Vim
 Vim is a text editor which aims to improve typing efficiency. The user interacts
 with the text through [motions](#motions) (fast ways of jumping the cursor
@@ -239,7 +285,9 @@ Motions are vimspeak for simply moving the cursor around the screen quickly.
 - `<leader>pb` Fuzzy find current buffer.
 - `<leader>pf` Fuzzy find current directory and down for files.
 - `<leader>pg` Fuzzy find all git files in current directory.
-- `<leader>pg` Search through saved markers.
+- `<leader>pm` Search through saved markers.
+- `<leader>ps` Ripgrep from parent directory for query.
+- `<leader>py` Show yank history and paste from selection with `<CR>`.
 - `<leader>bi` Search through bibliography.
 - - `<C-e>` Put whole citation down
 - - `<C-c>` Put citation title down
@@ -257,33 +305,6 @@ Motions are vimspeak for simply moving the cursor around the screen quickly.
 #### Formatting and Linting
 `<leader>mp` Auto-format 
 `<leader>mp` Auto-format 
-
-### LSP, Autocomplete, and AI integration
-#### Autocomplete
-Currently using nvim-cmp
-
-#### LSP
-Currently, only a few languages are installed. To install more, there are three
-options.
-**Option 1:** Edit the `plugins/mason.lua` file to add your language. 
-```lua
-require("mason-lspconfig").setup({
-  ensure_installed = {
-    "pyright",    -- Python
-    "lua_ls",     -- Lua
-    "rust_analyzer", -- Rust
-    "<your_lsp_here>", -- New Language
-  },
-```
-**Option 2:** Use the Mason installer, see `:Mason`
-**Option 3:** Enable automatic istallation in the `plugins/mason.lua`
-```lua
-  automatic_installation = true,
-```
-currently set to false.
-
-#### AI Integration
-WIP
 
 ### General Vim Commands
 - `s` delete characters under cursor and start typing. Works in normal, visual,
