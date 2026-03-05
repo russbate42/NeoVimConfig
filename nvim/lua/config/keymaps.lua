@@ -2,7 +2,9 @@
 -- print("In VIM keymaps")
 
 vim.g.mapleader = " "
-vim.keymap.set("n", "<leader>pv", ":Ex<CR>")
+-- vim.keymap.set("n", "<leader>pv", ":Ex<CR>")
+-- This is for Oil
+vim.keymap.set("n", "<leader>pv", ":Oil<CR>")
 
 -- VIMTEX KEYMAPS
 vim.keymap.set("n", "<leader>lc", ":VimtexCompile<CR>")

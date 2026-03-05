@@ -153,6 +153,9 @@ Just basic, we can add more features later.
  - [**Oil**](https://github.com/stevearc/oil.nvim) 
 >>>>>>> Stashed changes
 
+**Oil**
+ - [oil](https://github.com/stevearc/oil.nvim) 
+
 #### Package Wish List
  - [ ] Vim Fugitive
  - [ ] Gitsigns
