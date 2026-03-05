@@ -26,6 +26,29 @@ Make sure all recommended packages are installed. NeoVim may still work without
 these packages but for best results make sure your system has them available.
 
 #### Install Recommended Packages
+**System Tools**
+```bash
+sudo apt install nodejs npm
+sudo apt install luarocks
+sudo apt install python3.10-venv
+sudo apt install libclang-dev
+```
+`python3.10-venv` is required for Mason to install ruff.
+`libclang-dev` is required for rust to build tree-sitter-cli.
+
+**Node**
+```bash
+sudo npm install -g neovim
+```
+
+**Python**
+
+In addition, make sure a system wide basic python3 installation is set up.
+Recommended `>=3.10` Install the pynvim pacakge with pip or conda `pip install
+pynvim` or if it is already installed: `pip install pynvim --upgrade`
+
+**Rust Tools**
+
 Some tools require the installation of Rust. It is not recommended to install
 Rust on Ubuntu with apt - it will be outdated. Use the following script:
 ```bash
@@ -33,25 +56,38 @@ sudo apt-get install -y curl
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 source ~/.cargo/env
 ```
-**Rust Tools**
+Install tools:
 ```bash
 cargo install ripgrep
 cargo install tree-sitter-cli
 ```
-**Additional Tools**
-```bash
-sudo apt install nodejs npm
-sudo npm install -g neovim
-sudo apt install luarocks
-sudo apt install python3.10-venv
-```
-`python3.10-venv` is required for Mason to install ruff.
-
-In addition, make sure a basic python3 installation is set up. Install the
-pynvim pacakge with pip or conda `pip install pynvim` or if it is already
-installed: `pip install pynvim --upgrade`
 
 **Optional** Alias the neovim appimage to something like `nv` or `nvim`.
+
+**Terminal Config**
+It is highly recommended to use Nerd Fonts for your terminal. Some packages may
+not render properly without nerd fonts.
+
+Check for nerd fonts with `fc-list | grep -i nerd`
+
+If it is not installed:
+1) Download [YourChoiceNerdFont](https://www.nerdfonts.com/)
+2) Unzip the file:
+If `~/.local/share/fonts` does not exist `mkdir -p ~/.local/share/fonts`
+`cd ~/.local/share/fonts && cp ~/Downloads/YourChoiceNerdFont.zip ./`
+`unzip YourChoiceNerdFont.zip`
+3) Add to fonts: `fc-cache -fv`
+4) Verify: `fc-list | grep -i nerd`
+Finally, change your terminal config to include your font! Alacritty and
+FiraCode Nerd Font:
+```toml
+[font]
+normal      = { family = "FiraCode Nerd Font", style = "Regular" }
+bold        = { family = "FiraCode Nerd Font", style = "Bold" }
+italic      = { family = "FiraCode Nerd Font", style = "Italic" }
+bold_italic = { family = "FiraCode Nerd Font", style = "Bold Italic" }
+size        = 10.0
+```
 
 #### Running
 Finally, run the setup script.
@@ -109,9 +145,19 @@ Just basic, we can add more features later.
 
 **Harpoon2**
 
+<<<<<<< Updated upstream
+**VirtColumn**
+ - [virtcolumn](https://github.com/xiyaowong/virtcolumn.nvim) 
+=======
+ - [**VirtColumn**](https://github.com/xiyaowong/virtcolumn.nvim) 
+ - [**Oil**](https://github.com/stevearc/oil.nvim) 
+>>>>>>> Stashed changes
+
 #### Package Wish List
  - [ ] Vim Fugitive
- - [ ] Oil
+ - [ ] Gitsigns
+ - [x] VirtColumn
+ - [x] Oil
  - [ ] Minuet
  - [ ] Avante
 
