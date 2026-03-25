@@ -145,24 +145,17 @@ Just basic, we can add more features later.
 
 **Harpoon2**
 
-<<<<<<< Updated upstream
-**VirtColumn**
- - [virtcolumn](https://github.com/xiyaowong/virtcolumn.nvim) 
-=======
  - [**VirtColumn**](https://github.com/xiyaowong/virtcolumn.nvim) 
  - [**Oil**](https://github.com/stevearc/oil.nvim) 
->>>>>>> Stashed changes
-
-**Oil**
- - [oil](https://github.com/stevearc/oil.nvim) 
 
 #### Package Wish List
+ - [ ] Lualine
  - [ ] Vim Fugitive
  - [ ] Gitsigns
- - [x] VirtColumn
- - [x] Oil
  - [ ] Minuet
  - [ ] Avante
+ - [x] VirtColumn
+ - [x] Oil
 
 ### To Do
  - [x] Telescope

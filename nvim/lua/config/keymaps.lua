@@ -4,7 +4,14 @@
 vim.g.mapleader = " "
 -- vim.keymap.set("n", "<leader>pv", ":Ex<CR>")
 -- This is for Oil
-vim.keymap.set("n", "<leader>pv", ":Oil<CR>")
+-- vim.keymap.set("n", "<leader>pv", ":Oil<CR>")
+vim.keymap.set("n", "<leader>pv", function()
+  if vim.bo.buftype == "" and vim.fn.expand("%") ~= "" then
+    require("oil").open_float()
+  else
+    require("oil").open()
+  end
+end, { desc = "Open oil" })
 
 -- VIMTEX KEYMAPS
 vim.keymap.set("n", "<leader>lc", ":VimtexCompile<CR>")
@@ -26,7 +33,9 @@ vim.keymap.set('n', '<leader>tc', function()
 -- LUASNIP KEYMAPS
 vim.keymap.set("n", "<leader>rs", function()
     require("luasnip").cleanup()
-    require("luasnip.loaders.from_lua").load({paths = "~/.config/nvim/snippets/"})
+    require("luasnip.loaders.from_lua").load(
+        {paths = "~/.config/nvim/snippets/"}
+    )
     print("Snippets reloaded!")
 end, { desc = "Reload snippets" })
 
