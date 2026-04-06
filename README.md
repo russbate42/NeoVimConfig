@@ -6,6 +6,13 @@ This is a repository for maintaining versions of neovim
 This package uses nvim stable release appimages. It is only tested on `x86_64`
 Ubuntu architecture.
 
+## Auto Install
+Please look through the script before blindly sudo executing this script. Once
+you are satisfied, `sudo ./auto_install.sh` If there are no errors, `source
+setup_nvim.sh`. If there _are_ errors, go to the corresponding section of the
+manual install.
+
+## Manual Install
 ### Download NeoVim
 Go to the [Releases](https://github.com/neovim/neovim/releases) page. Under the
 latest stable build, select the app image for the appropriate architecture `x86_64`.
@@ -30,7 +37,7 @@ these packages but for best results make sure your system has them available.
 ```bash
 sudo apt install nodejs npm
 sudo apt install luarocks
-sudo apt install python3.10-venv
+sudo apt install python3-venv
 sudo apt install libclang-dev
 ```
 `python3.10-venv` is required for Mason to install ruff.
