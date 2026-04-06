@@ -1,10 +1,11 @@
 # Instructions to test development in different environments
 
+## Ubuntu Example
 Build the image:
-`docker build -t myproject-ubuntu docker/ubuntu/`
+`docker build -t ubuntu2204 .`
 
 Run the image:
-`docker run -it --rm -v /path/to/install.sh:/workspace/install.sh myproject-ubuntu bash`
+`docker run -it --rm -v ~/NeoVimConfig/auto_install.sh:/workspace/install.sh:z ubuntu2204 bash`
 
-then inside: `bash /workspace/install.sh`
+then inside: `bash ./install.sh`
 

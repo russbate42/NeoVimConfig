@@ -13,6 +13,23 @@ setup_nvim.sh`. If there _are_ errors, go to the corresponding section of the
 manual install.
 
 ## Manual Install
+### List of Packages
+#### System
+pip
+nodejs
+luarocks
+libclang-dev (all associated c/c++ compilers)
+python3-pynvim
+python3-venv
+npm
+#### npm
+neovim
+#### Rust
+tree-sitter-cli
+ripgrep
+#### Python
+Python>=3.10
+
 ### Download NeoVim
 Go to the [Releases](https://github.com/neovim/neovim/releases) page. Under the
 latest stable build, select the app image for the appropriate architecture `x86_64`.
@@ -40,7 +57,7 @@ sudo apt install luarocks
 sudo apt install python3-venv
 sudo apt install libclang-dev
 ```
-`python3.10-venv` is required for Mason to install ruff.
+`python3-venv` is required for Mason to install ruff.
 `libclang-dev` is required for rust to build tree-sitter-cli.
 
 **Node**
