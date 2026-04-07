@@ -276,8 +276,6 @@ if [[ $? -eq 0 ]]; then
         printf "\t${CYN}User install detected ..${RST}\n"
         printf "\t${CYN}Changing permissions ..${RST}\n"
         chmod +x "${current_version}"
-        printf "\t${CYN}Aliasing to nv ..${RST}\n\n"
-        ln -s "$(pwd)/nvim.appimage" /usr/local/bin/nv
     fi
 else
     printf "\n${ORG}Warning: NeoVim download failed!!${RST}\n"
@@ -337,14 +335,14 @@ else
     printf "\tConsider updating python system wide\n"
 fi
 
+if [[ $failures == "true" ]]; then
+    printf "\nFound install failures.\n"
+    printf "Check ${LOG_FILE} for details.\n\n"
+fi
+
 # Install nerd fonts!
 printf "\nPlease add FiraCode Nerd Font to your terminal config\n"
 printf "See Manual Install ${BOLD}Terminal Config${RST}\n\n"
 
 # NeoVim alias
 printf "Add $(which nv) to aliases!!\n\n"
-if [[ $failures == "true" ]]; then
-    printf "\nFound install failures.\n"
-    printf "Check ${LOG_FILE} for details.\n\n"
-fi
-

@@ -22,11 +22,22 @@ libclang-dev (all associated c/c++ compilers)
 python3-pynvim
 python3-venv
 npm
-#### npm
+
+#### Node
 neovim
+If node is out of date and you do not have sudo privileges, try a local install:
+```bash
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+source ~/.bashrc
+nvm install 20
+nvm use 20
+which nvm
+```
+
 #### Rust
 tree-sitter-cli
 ripgrep
+
 #### Python
 Python>=3.10
 
@@ -131,6 +142,15 @@ npm --version
 ```
 Note that linters and formatters are not installed automatically. Manual install
 of ruff is required `:Mason` and `i` to install ruff.
+
+### Remote Use
+
+**On the remote machine:**
+`nvim --listen /tmp/nvim.sock`
+
+**On the local machine:**
+`ssh -L /tmp/nvim-remote.sock:/tmp/nvim.sock user@remote`
+`nvim --server /tmp/nvim-remote.sock --remote-ui`
 
 ## Development
 **Reminder** When creating new plugin files run `source setup_nvim.sh`
