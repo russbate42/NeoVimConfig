@@ -3,8 +3,9 @@
 This is a repository for maintaining versions of neovim
 
 ## Setup
-This package uses nvim stable release appimages. It is only tested on `x86_64`
-Ubuntu architecture.
+This package uses nvim stable release appimages. Auto install will download v12,
+but releases are also available at the [release
+page](https://github.com/neovim/neovim/releases) under "Assets."
 
 ## Auto Install
 Please look through the script before blindly sudo executing this script. Once
@@ -12,31 +13,49 @@ you are satisfied, `sudo ./auto_install.sh` If there are no errors, `source
 setup_nvim.sh`. If there _are_ errors, go to the corresponding section of the
 manual install.
 
-## Manual Install
-### List of Packages
-#### System
-pip
-nodejs
-luarocks
-libclang-dev (all associated c/c++ compilers)
-python3-pynvim
-python3-venv
-npm
-#### npm
-neovim
-#### Rust
-tree-sitter-cli
-ripgrep
-#### Python
-Python>=3.10
+**Supported Systems**
+ - Ubuntu
+ - OpenSUSE Tumbleweed
 
-### Download NeoVim
+Working on support for
+ - OpenSUSE
+ - Arch
+ - MacOS
+ - WSL
+
+## Manual Install
+Many NeoVim plugins require system packages. NeoVim may still work without these
+packages but for best results make sure your system has them available. These
+instructions are split in two parts. First a simple list of all required
+packages using Ubuntu releases as a base naming system. Adapt and install as
+necessary. Second, a Ubuntu based full set of instructions will be provided.
+
+### List of Packages
+<details>
+  <summary>Details
+  </summary>
+
+**System**: These are from the Ubuntu package repositories. Different Linux flavours will
+differ in their naming. For Ubuntu, use `apt-get`.
+`luarocks python3 python3-pynvim python3-venv libclang-dev pip nodejs npm`.
+`libclang-dev` should be all associated c/c++ compilers 
+
+**Node**:
+`neovim`
+
+**Rust**: `ripgrep tree-sitter-cli`
+</details>
+
+### Setup Ubuntu
+<details>
+  <summary>Run the following commands in order:</summary>
+
+**Download NeoVim**
+
 Go to the [Releases](https://github.com/neovim/neovim/releases) page. Under the
 latest stable build, select the app image for the appropriate architecture `x86_64`.
-
-Simply change the permissions on the appimage `chmod u+x nvim-linux-x86_64.appimage`
-
-Currently working with the following version:
+Simply change the permissions on the appimage `chmod u+x
+nvim-linux-x86_64.appimage`. Currently working with the following version:
 ```bash
 NVIM v0.11.3
 Build type: Release
@@ -44,17 +63,13 @@ LuaJIT 2.1.1741730670
 Run "nvim -V1 -v" for more info
 ```
 
-### Setup Local
-Run the following commands in order:
-Make sure all recommended packages are installed. NeoVim may still work without
-these packages but for best results make sure your system has them available.
-
-#### Install Recommended Packages
 **System Tools**
 ```bash
 sudo apt install nodejs npm
 sudo apt install luarocks
+sudo apt install python3
 sudo apt install python3-venv
+sudo apt install python3-pynvim
 sudo apt install libclang-dev
 ```
 `python3-venv` is required for Mason to install ruff.
@@ -64,14 +79,27 @@ sudo apt install libclang-dev
 ```bash
 sudo npm install -g neovim
 ```
+If the LSP server does not work, you may have an outdated version of node. Check
+`node --version`. Neovim LSP requries `Node.js 14+`. To update on Ubuntu, run
+```bash
+sudo apt-get remove --purge libnode-dev nodejs npm
+sudo apt-get autoremove
+curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
+sudo apt-get update
+sudo apt-get install -y nodejs
+node --version
+npm --version
+```
+If sudo privileges are not present, another method is 
+```bash
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+source ~/.bashrc
+nvm install 20
+nvm use 20
+which nvm
+```
 
-**Python**
-
-In addition, make sure a system wide basic python3 installation is set up.
-Recommended `>=3.10` Install the pynvim pacakge with pip or conda `pip install
-pynvim` or if it is already installed: `pip install pynvim --upgrade`
-
-**Rust Tools**
+**Rust**:
 
 Some tools require the installation of Rust. It is not recommended to install
 Rust on Ubuntu with apt - it will be outdated. Use the following script:
@@ -86,9 +114,18 @@ cargo install ripgrep
 cargo install tree-sitter-cli
 ```
 
-**Optional** Alias the neovim appimage to something like `nv` or `nvim`.
+**Python**
+
+System should have python >=3.10. Check with `python --version`. Install or
+update the pynvim pacakge with pip or conda `pip install pynvim` or if it is
+already installed: `pip install pynvim --upgrade`
+
+**NeoVim Alias**
+
+(Optional) alias the neovim appimage to something like `nv` or `nvim`.
 
 **Terminal Config**
+
 It is highly recommended to use Nerd Fonts for your terminal. Some packages may
 not render properly without nerd fonts.
 
@@ -118,19 +155,19 @@ Finally, run the setup script.
 `source setup_nvim.sh`
 Run `~/nvim-linux-x86_64.appimage` or wherever you have saved/aliased to!
 
-If the LSP server does not work, you may have an outdated version of node. Check
-`node --version`. Neovim LSP requries `Node.js 14+`. To update on Ubuntu, run
-```bash
-sudo apt-get remove --purge libnode-dev nodejs npm
-sudo apt-get autoremove
-curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
-sudo apt-get update
-sudo apt-get install -y nodejs
-node --version
-npm --version
-```
 Note that linters and formatters are not installed automatically. Manual install
 of ruff is required `:Mason` and `i` to install ruff.
+
+</details>
+
+## Remote Use
+
+**On the remote machine:**
+`nvim --listen /tmp/nvim.sock`
+
+**On the local machine:**
+`ssh -L /tmp/nvim-remote.sock:/tmp/nvim.sock user@remote`
+`nvim --server /tmp/nvim-remote.sock --remote-ui`
 
 ## Development
 **Reminder** When creating new plugin files run `source setup_nvim.sh`
@@ -182,19 +219,20 @@ Just basic, we can add more features later.
  - [x] Oil
 
 ### To Do
+ - [ ] Move user manual to separate docs page!
+   - [ ] Ensure all package specific commands are listed
+ - [ ] Update docs to link installed packages
+ - [ ] LuaSnip Friends (friendly snippets?)
+ - [ ] Move user manual to
+ - [ ] Install vim fugitive & other git helpers
+
+#### Recent Changes
  - [x] Telescope
  - [x] Harpoon2
  - [x] Update nvim-cmp with LSP features
  - - [x] install pyright
  - - [x] Mason
  - - [x] Linters (Ruff)
- - [ ] Update docs to link installed packages
- - [ ] LuaSnip Friends (friendly snippets?)
- - [ ] Install vim fugitive & other git helpers
-
-#### Recent Changes
- - [x] Install nvim-cmp with LuaSnips
- - [x] VimTeX
 
 ### LSP, Autocomplete, and AI integration
 #### Autocomplete
@@ -224,7 +262,9 @@ currently set to false.
 WIP
 
 ### Structure
-This neovim config uses the following structure:
+<details>
+    <summary>This neovim config uses the following structure:</summary>
+
 ```bash
 ├── clean_nvim.sh
 ├── nvim
@@ -268,6 +308,8 @@ This neovim config uses the following structure:
 ├── README.md
 └── setup_nvim.sh
 ```
+
+</details>
 
 ## User Manual
 ### Gentle Introduction to Vim

@@ -1,13 +1,17 @@
 #!/bin/bash
 
 # Formatting variables
-BOLD=$'\033[1m'
 RED=$'\033[91m'
 ORG=$'\033[38;5;208m'
+YEL=$'\033[93m'
+LGN=$'\033[92m'
 GRN=$'\033[38;5;35m'
 CYN=$'\033[96m'
-BLU=$'\033[34m'
+LBL=$'\033[38;5;39m'
+BLU=$'\033[94m'
 BBLU=$'\033[94m'
+PRP=$'\033[38;5;135m'
+MAG=$'\033[95m'
 RST=$'\033[0m'
 LGRN=$'\033[38;5;82m'
 TICK="${GRN}${BOLD}✔${RST}"
@@ -30,20 +34,23 @@ if [[ -f /.dockerenv ]]; then
     if [[ ! -e /etc/localtime ]]; then
         ln -fs /usr/share/zoneinfo/UTC /etc/localtime
     fi
+    fontdir=/workspace
 fi
 
 # User accessed variables
 ARGS_INSTALL_DEPENDENCIES=true
 INTERACTIVE_MODE=false
-SETUP_LOCAL_NEO=false
+SETUP_LOCAL_NEO=true
+NERDFONT_INSTALL=true
 
 function usage() {
     echo "Usage: (sudo) ./install.sh [<options>]"
     echo ""
     echo "Options:"
-    echo "    -h, --help                               Print this help message"
-    echo "    -y, --yes                                Disable confirmation prompts (answer yes to all questions)"
-    echo "    --[no-]install-dependencies              Whether to automatically install external dependencies (will prompt by default)"
+    echo "\tNone! HAHAHAHAHA (for now)\n"
+    # echo "    -h, --help                               Print this help message"
+    # echo "    -y, --yes                                Disable confirmation prompts (answer yes to all questions)"
+    # echo "    --[no-]install-dependencies              Whether to automatically install external dependencies (will prompt by default)"
 }
 
 # Parse arguments
@@ -90,10 +97,10 @@ install_cmd=
 failures=false
 
 if [[ $main_os == *"Linux"* ]]; then
-    flavour_str=$(cat /etc/issue)
+    # flavour_str=$(cat /etc/issue)
     os_release_pretty_name="$(cat /etc/os-release | grep PRETTY_NAME)"
     if [[ $os_release_pretty_name == *"Ubuntu"* ]]; then
-        printf "\n${BLU}Ubuntu detected${RST}\n"
+        printf "\n${MAG}Ubuntu detected${RST}\n"
         ubuntu=true
         install_cmd=(apt-get install -y -qq)
     elif [[ $os_release_pretty_name == *"Tumbleweed"* ]]; then
@@ -120,18 +127,6 @@ else
     return 0
 fi
 
-# # Check for existing neovim
-# nv_version=
-# nv_version_satisfied=false
-# if command -v nv &> /dev/null; then
-#     :
-# elif command -v nvim &> /dev/null; then
-#     :
-# elif command -v neovim &> /dev/null; then
-#     :
-# else
-#     printf "${ORG}Warning: NeoVim not found under aliases nv nvim neovim${RST}\n"
-# fi
 
 # Update installer and define packages
 system_packages=()
@@ -139,20 +134,27 @@ npm_packages=(neovim)
 rust_packages=(ripgrep tree-sitter-cli)
 if [[ $ubuntu == "true" ]]; then
     printf "\n${CYN}Updating apt-get${RST}\n"
+    printf "\t${CYN}apt-get update -y${RST}\n"
     apt-get update -y
+    printf "\t${CYN}apt-get upgrade -y${RST}\n"
     apt-get upgrade -y
     printf "\n${CYN}Finished updating apt-get ..${RST}\n"
     system_packages=(curl tzdata nodejs npm luarocks python3-venv)
     system_packages+=(python3-pynvim pip libclang-dev)
 elif [[ $tumbleweed == "true" ]]; then
     printf "\n${CYN}Refreshing zypper${RST}\n"
-    zypper dup -y
+    printf "\t${CYN}For a larger system update:${RST} zypper dup -y\n"
+    printf -- "\t${CYN}zypper update -y${RST}\n"
+    zypper update -y
     # necessary for rust build thingies
-    zypper ar -y -f https://download.opensuse.org/repositories/devel:languages:javascript/openSUSE_Tumbleweed/devel:languages:javascript.repo
+    printf -- "\t${CYN}zypper ar -f -G https://download.opensuse.org/repositories/devel:languages:javascript/openSUSE_Tumbleweed/devel:languages:javascript.repo${RST}\n"
+    zypper ar -f -G https://download.opensuse.org/repositories/devel:languages:javascript/openSUSE_Tumbleweed/devel:languages:javascript.repo
     zypper refresh
     printf "\n${CYN}Finished refresh ..${RST}\n"
-    system_packages=(curl quickjs timezone nodejs npm lua54-rocks python3-venv)
-    system_packages+=(python3-pynvim python3-pip llvm-libclang-dev)
+    system_packages=(curl quickjs timezone fontconfig nodejs npm)
+    system_packages+=(lua lua55-luarocks)
+    system_packages+=(python3 python3-virtualenv python3-neovim python3-pip)
+    system_packages+=(clang clang-devel llvm llvm-devel make)
 elif [[ $red_hat == "true" ]]; then
     printf "\n${CYN}Updating yum${RST}\n"
     yum update
@@ -164,11 +166,18 @@ elif $macos; then
     :
 fi
 
+
 # System
 declare -A system_packages_status
 printf "\nInstalling system packages\n"
 for pkg in "${system_packages[@]}"; do
-    printf "\tInstalling ${pkg}\n"
+    printf "\t${CYN}Installing ${pkg}${RST}\n"
+    if dpkg -s "${pkg}" &> /dev/null; then
+        printf "\t${pkg} already installed, skipping\n"
+        system_packages_status["${pkg}"]=0
+        continue
+    fi
+
     if [[ "${pkg}" == "nodejs" || "${pkg}" == "npm" ]]; then
         "${install_cmd[@]}" $pkg > /dev/null 2>&1
     else
@@ -178,9 +187,10 @@ for pkg in "${system_packages[@]}"; do
     printf "\n"
 done
 
+
 # Unique to Ubuntu installs (I think)
 if [[ $ubuntu == "true" ]]; then
-    printf "\nUpdating nodejs and npm specific for Ubuntu!\n"
+    printf "\n${MAG}Updating nodejs and npm specific for Ubuntu!${RST}\n"
     apt-get remove -y -qq --purge libnode-dev nodejs npm
     apt-get autoremove -y -qq
     curl -fsSL https://deb.nodesource.com/setup_lts.x | bash -
@@ -190,43 +200,38 @@ if [[ $ubuntu == "true" ]]; then
     apt-get install -y -qq npm > /dev/null 2>&1
 fi
 
+
 # Python install
 python_version_satisfied=false
 if command -v python3 &> /dev/null; then
+    printf "\n${CYN}Checking python version ..${RST}\n"
     py_version_str="$(python3 --version)"
-    if [[ $py_version_str == *"3.12"* ]]; then
+    if [[ $py_version_str == *"3.13"* ]]; then
         python_version_satisfied=true
-        printf "\nPython version >=3.12 found\n"
+        printf "\t${CYN}Python version >=3.13 found${RST}\n"
+    elif [[ $py_version_str == *"3.12"* ]]; then
+        python_version_satisfied=true
+        printf "\t${CYN}Python version >=3.12 found${RST}\n"
     elif [[ $py_version_str == *"3.11"* ]]; then
         python_version_satisfied=true
-        printf "\nPython version >=3.11 found\n"
+        printf "\t${CYN}Python version >=3.11 found${RST}\n"
     elif [[ $py_version_str == *"3.10"* ]]; then
         python_version_satisfied=true
-        printf "\nPython version >=3.10 found\n"
+        printf "\t${CYN}Python version >=3.10 found${RST}\n"
     elif [[ $py_version_str == *"3.9"* ]]; then
-        python_version_satisfied=true
-        printf "\nPython version >=3.9 found\n"
+        python_version_satisfied=false
+        printf "\t${RED}Python version >=3.9 found${RST}\n"
     else
         printf "${ORG}\nWarning: ${py_version_str} found. "
         printf "This is not supported.${RST}\n"
     fi
+else
+    printf "\n${ORG}Command python not found ..\n"
+    printf "\tSomething has gone wrong with the install!${RST}\n"
 fi
 
-# check for versions
 
-# pip
-# pip_packages=(pynvim)
-# declare -A pip_packages_status
-# if command -v pip &> /dev/null; then
-#     for thingy in "${pip_packages[@]}"; do
-#         pip install $thingy
-#         pip_packages_status["${thingy}"]=$?
-#     done
-# else
-#     printf "${ORG}Warning: No pip found, skipping install!${RST}\n"
-# fi
-
-## Node
+## NodeJS
 declare -A npm_packages_status
 if command -v npm &> /dev/null; then
     for thingy in "${npm_packages[@]}"; do
@@ -237,11 +242,22 @@ else
     printf "${ORG}Warning: No npm found, skipping install!${RST}\n"
 fi
 
+
 ## Rust
 declare -A rust_packages_status
 if command -v curl &> /dev/null; then
     printf "\n${BLU}Installing ${RED}rust${BLU} with ${RED}curl${RST}\n"
-    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+    if [[ -f /.dockerenv ]]; then
+        printf "\n\t${CYN}Docker image detected, running curl directly .."
+        printf "${RST}\n"
+        curl --proto '=https' --tlsv1.2 \
+            -sSf https://sh.rustup.rs | sh -s -- -y
+    else
+        printf "\n\t${CYN}Installing rust as developer with user .."
+        printf "${RST}\n"
+        sudo -u "${SUDO_USER}" curl --proto '=https' --tlsv1.2 \
+            -sSf https://sh.rustup.rs | sh -s -- -y
+    fi
     source ~/.cargo/env
     # install packages
     printf "\n${BLU}Installing ${RED}rust${BLU} packages${RST}\n"
@@ -276,8 +292,6 @@ if [[ $? -eq 0 ]]; then
         printf "\t${CYN}User install detected ..${RST}\n"
         printf "\t${CYN}Changing permissions ..${RST}\n"
         chmod +x "${current_version}"
-        printf "\t${CYN}Aliasing to nv ..${RST}\n\n"
-        ln -s "$(pwd)/nvim.appimage" /usr/local/bin/nv
     fi
 else
     printf "\n${ORG}Warning: NeoVim download failed!!${RST}\n"
@@ -285,9 +299,47 @@ else
 fi
 #-------------------------------------------------------------------------------
 
+
+# Install nerd fonts!
+#-------------------------------------------------------------------------------
+printf "\n${BLU}Installing Nerd Fonts ..\n"
+printf "\tchecking for Nerd Fonts ..${RST}\n"
+NERD_FS="https://github.com/ryanoasis/nerd-fonts/releases/"
+NERD_FS="${NERD_FS}latest/download/FiraCode.zip"
+
+if [[ -z "$(fc-list | grep -i nerd)" ]] &&\
+                            command -v curl &> /dev/null; then
+    printf "\n${CYN}Installing Fira Code Nerd Font!\n"
+    if [[ ! -d ~/.local/share/fonts ]]; then
+        printf "No font directory found\n"
+        printf "\t Creating ~/.local/share/fonts\n"
+        mkdir -p ~/.local/share/fonts
+    fi
+    CURRENT_DIRECTORY=$(pwd)
+    cd ~/.local/share/fonts
+    curl -LO $NERD_FS
+    unzip FiraCode.zip
+    fc-cache -fv
+    cd $CURRENT_DIRECTORY
+    if [[ ! -z "$(fc-list | grep -i nerd)" ]]; then
+        printf "\n${GRN}Font install successful!\n"
+    else
+        printf "\n${RED}Font install failed ==> see manual install ..\n"
+    fi
+elif ! command -v curl &> /dev/null; then
+    printf "\n${RED}No curl found ==> See manual install!${RST}\n"
+else
+    printf "\n${GRN}It appears Nerd Fonts are already installed!\n"
+fi
+printf "${RST}"
+printf "\nPlease add FiraCode (default) Nerd Font to your terminal config\n"
+printf "See Manual Install ${BOLD}Terminal Config${RST}\n\n"
+#-------------------------------------------------------------------------------
+
 # Print summary
-printf "\nInstall Summary:\n"
-printf  -- "-----------------------------------------------\n\n"
+#-------------------------------------------------------------------------------
+printf "\n${BLU}Install Summary:\n"
+printf  -- "-----------------------------------------------${RST}\n\n"
 
 printf "System:\n"
 for pkg in "${!system_packages_status[@]}"; do
@@ -298,16 +350,6 @@ for pkg in "${!system_packages_status[@]}"; do
         printf "\t${CROSS} ${pkg}\n"
     fi
 done
-
-# printf "Pip:"
-# for pkg in "${!pip_packages_status[@]}"; do
-#     if [[ ${pip_packages_status[$pkg]} -eq 0 ]]; then
-#         printf "\t${TICK} ${pkg}\n"
-#     else
-#         failures=true
-#         printf "\t${CROSS} ${pkg}\n"
-#     fi
-# done
 
 printf "Npm:\n"
 for pkg in "${!npm_packages_status[@]}"; do
@@ -337,14 +379,15 @@ else
     printf "\tConsider updating python system wide\n"
 fi
 
-# Install nerd fonts!
-printf "\nPlease add FiraCode Nerd Font to your terminal config\n"
-printf "See Manual Install ${BOLD}Terminal Config${RST}\n\n"
-
-# NeoVim alias
-printf "Add $(which nv) to aliases!!\n\n"
 if [[ $failures == "true" ]]; then
     printf "\nFound install failures.\n"
     printf "Check ${LOG_FILE} for details.\n\n"
 fi
+printf  -- "${BLU}-----------------------------------------------${RST}\n\n"
+#-------------------------------------------------------------------------------
 
+# NeoVim alias
+if [[ ! -f /.dockerenv ]]; then
+	printf "Add $(pwd)/nvim-linux-x86_64.appimage to aliases!!\n"
+fi
+printf "\n\t${GRN}Done auto install!${RST}\n\n"
