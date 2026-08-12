@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 
-echo -e "\nSetting up NeoVim for Ubuntu with Russell's configuration."
+echo -e "\nSetting up NeoVim for Linux with Russell's configuration.\n"
 # echo -e "\t+--> Please run using bash\n"
 
 #if [[ "${SHELL}" == *"zsh"* ]]; then
@@ -13,6 +13,21 @@ echo -e "\nSetting up NeoVim for Ubuntu with Russell's configuration."
 # Check for .config directory
 if [ -d ~/.config ]; then
 	echo "--> .config directory exists"
+    if [ -d ~/.config/nvim ]; then
+        printf "\tExisting configs for nvim found.\n"
+        printf "\tWould you like to clear old configs?\n"
+        read input
+        lower="$input:l"
+        if [[ $lower == "yes" || $lower == "y" ]]; then
+            printf "\n\tSourcing clean_nvim.sh .."
+            sleep .2
+            source clean_nvim.sh
+            printf "\tDone cleaning old configs ..\n\n"
+            sleep .2
+        else
+            printf "\n\tSkipping clean ..\n"
+        fi
+    fi
 else
 	echo "--> .config directory does not exist"
 	echo "--> Creating config directory"

@@ -20,13 +20,9 @@ CROSS="${RED}${BOLD}✘${RST}"
 # General Install
 #-------------------------------------------------------------------------------
 printf -- "\n\n------------------------------------------\n"
-printf -- "${BLU}-- NEOVIM AUTO INSTALL --${RST}\n"
+printf -- "\t${BLU}-- NEOVIM AUTO INSTALL --${RST}\n"
 printf -- "------------------------------------------\n"
 #-------------------------------------------------------------------------------
-
-# install log
-LOG_FILE="${pwd}/install.log"
-exec > >(tee -a "$LOG_FILE") 2>&1
 
 # Time zone (checks if it is set)
 if [[ -f /.dockerenv ]]; then
@@ -42,28 +38,24 @@ ARGS_INSTALL_DEPENDENCIES=true
 INTERACTIVE_MODE=false
 SETUP_LOCAL_NEO=true
 NERDFONT_INSTALL=true
+INSTALL_RUST=true
 
 function usage() {
     echo "Usage: (sudo) ./install.sh [<options>]"
     echo ""
     echo "Options:"
-    echo "\tNone! HAHAHAHAHA (for now)\n"
-    # echo "    -h, --help                               Print this help message"
-    # echo "    -y, --yes                                Disable confirmation prompts (answer yes to all questions)"
-    # echo "    --[no-]install-dependencies              Whether to automatically install external dependencies (will prompt by default)"
+    echo "  --[no-]install-dependencies    Install all relevant dependencies."
+    echo "  --[no-]install-rust            Install rust in the user directory. If"
+    echo -e "\t no, will attempt to install rust packages as binary from "
+    echo -e "\t the relevant package manager. Still in beta."
+    echo "  --yes, -y                      Work in interactive mode. Not working yet."
+    return 0
 }
 
 # Parse arguments
 while [[ "$#" -gt 0 ]]; do
+    echo "arg ${1}"
     case "$1" in
-        -l | --local)
-            ARGS_LOCAL=1
-            shift
-            ;;
-        --overwrite)
-            ARGS_OVERWRITE=1
-            shift
-            ;;
         -y | --yes)
             INTERACTIVE_MODE=0
             shift
@@ -75,14 +67,29 @@ while [[ "$#" -gt 0 ]]; do
             ARGS_INSTALL_DEPENDENCIES=false
             shift
             ;;
+        --no-rust-install)
+            INSTALL_RUST=false
+            shift
+            ;;
+        --rust-install)
+            INSTALL_RUST=true
+            shift
+            ;;
         -h | --help)
             usage
-            shift
-            return 0
+            exit 0
+            ;;
+        -* | --*)
+            printf "\n${RED}Unkown argument:${YEL} ${1}${RST}\n"
+            usage
+            exit 0
             ;;
     esac
 done
 
+# install log
+LOG_FILE="$(pwd)/install.log"
+exec > >(tee -a "$LOG_FILE") 2>&1
 
 # Define install script variables
 main_os=$(uname -s)
@@ -117,14 +124,14 @@ if [[ $main_os == *"Linux"* ]]; then
         install_cmd=(pacman install -y)
     else
         printf "\n${RED}ERROR: Linux flavour not found. Returning 0${RST}\n"
-        return 0
+        exit 0
     fi
 elif [[ $main_os == *"Mac" ]]; then
     printf "MacOS not supported yet. Returning 0\n"
-    return 0
+    exit 0
 else
     printf "Main OS Not detected. Returning 0\n"
-    return 0
+    exit 0
 fi
 
 
@@ -141,6 +148,12 @@ if [[ $ubuntu == "true" ]]; then
     printf "\n${CYN}Finished updating apt-get ..${RST}\n"
     system_packages=(curl tzdata nodejs npm luarocks python3-venv)
     system_packages+=(python3-pynvim pip libclang-dev)
+    if [ ! $INSTALL_RUST ]; then
+        printf "\n\t${YEL}Warning: installing ripgrep and tree-sitter "
+        printf " as system packages is un-tested in Ubuntu."
+        printf " Installing Rust is the current recommendation.${RST}\n"
+        system_packages+=(ripgrep tree-sitter-cli)
+    fi
 elif [[ $tumbleweed == "true" ]]; then
     printf "\n${CYN}Refreshing zypper${RST}\n"
     printf "\t${CYN}For a larger system update:${RST} zypper dup -y\n"
@@ -155,14 +168,23 @@ elif [[ $tumbleweed == "true" ]]; then
     system_packages+=(lua lua55-luarocks)
     system_packages+=(python3 python3-virtualenv python3-neovim python3-pip)
     system_packages+=(clang clang-devel llvm llvm-devel make)
+    if [ ! $INSTALL_RUST ]; then
+        system_packages+=(ripgrep tree-sitter)
+    fi
 elif [[ $red_hat == "true" ]]; then
     printf "\n${CYN}Updating yum${RST}\n"
     yum update
     yum upgrade -y
+    printf "\n${CYN}Finished update ..${RST}\n"
     system_packages=(curl tzdata nodejs npm luarocks python3-venv)
     system_packages+=(python3-pynvim pip libclang-dev)
-    printf "\n${CYN}Finished update ..${RST}\n"
+    if [ ! $INSTALL_RUST ]; then
+        printf "\n${YEL}Warning: installing ripgrep and tree-sitter "
+        printf "is un-tested in red hat.${RST}\n"
+        system_packages+=(ripgrep tree-sitter)
+    fi
 elif $macos; then
+    printf "\nMacOS not supported yet ..\n"
     :
 fi
 
@@ -245,26 +267,33 @@ fi
 
 ## Rust
 declare -A rust_packages_status
-if command -v curl &> /dev/null; then
+if  command -v curl &> /dev/null && [[ "${INSTALL_RUST}" == "true" ]]; then
     printf "\n${BLU}Installing ${RED}rust${BLU} with ${RED}curl${RST}\n"
     if [[ -f /.dockerenv ]]; then
         printf "\n\t${CYN}Docker image detected, running curl directly .."
         printf "${RST}\n"
         curl --proto '=https' --tlsv1.2 \
             -sSf https://sh.rustup.rs | sh -s -- -y
+        source ~/.cargo/env
+        printf "\n${BLU}Installing ${RED}rust${BLU} packages${RST}\n"
+        # Installing packages is easy in docker
+        for thingy in "${rust_packages[@]}"; do
+            cargo install $thingy
+            rust_packages_status["${thingy}"]=$?
+        done
     else
-        printf "\n\t${CYN}Installing rust as developer with user .."
-        printf "${RST}\n"
-        sudo -u "${SUDO_USER}" curl --proto '=https' --tlsv1.2 \
-            -sSf https://sh.rustup.rs | sh -s -- -y
+        printf "\n\t${CYN}Installing rust as ${SUDO_USER} ..${RST}\n"
+        user_home=$(getent passwd "${SUDO_USER}" | cut -d: -f6)
+        sudo -u "${SUDO_USER}" sh -c \
+            'curl --proto "=https" --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y'
+        printf "\n${BLU}Installing ${RED}rust${BLU} packages${RST}\n"
+        # Install packages as user requires more effort
+        for thingy in "${rust_packages[@]}"; do
+            sudo -u "${SUDO_USER}" sh -c \
+                ". \"${user_home}/.cargo/env\" && cargo install \"${thingy}\""
+            rust_packages_status["${thingy}"]=$?
+        done
     fi
-    source ~/.cargo/env
-    # install packages
-    printf "\n${BLU}Installing ${RED}rust${BLU} packages${RST}\n"
-    for thingy in "${rust_packages[@]}"; do
-        cargo install $thingy
-        rust_packages_status["${thingy}"]=$?
-    done
 else
     printf "${ORG}Warning: No curl found, skipping rust install!${RST}\n"
 fi
@@ -332,7 +361,7 @@ else
     printf "\n${GRN}It appears Nerd Fonts are already installed!\n"
 fi
 printf "${RST}"
-printf "\nPlease add FiraCode (default) Nerd Font to your terminal config\n"
+printf "\nPlease add FiraCode Mono (default) Nerd Font to your terminal config\n"
 printf "See Manual Install ${BOLD}Terminal Config${RST}\n\n"
 #-------------------------------------------------------------------------------
 
