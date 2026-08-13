@@ -4,7 +4,7 @@ return {
         submodules = true
     },
 
-    {'nvim-telescope/telescope.nvim', tag = '0.1.8', -- or branch = '0.1.x',
+    {'nvim-telescope/telescope.nvim', version = '*', -- or branch = '0.1.x',
         dependencies = { 'nvim-lua/plenary.nvim', 'gbprod/yanky.nvim' },
         config = function()
             local tel = require("telescope")
@@ -23,11 +23,11 @@ return {
                         height = function(_, _, max_lines)
                             return math.min(max_lines, 40)
                         end,
-                        
+
                         -- Custom breakpoint for switching layouts
                         flip_columns = 100,  -- Switch to vertical when width < 100
                         flip_lines = 20,     -- Switch to horizontal when height < 20
-                        
+
                         horizontal = {
                             width = 0.9,
                             height = 0.8,
