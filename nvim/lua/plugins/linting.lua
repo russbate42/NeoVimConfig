@@ -4,9 +4,9 @@ return {
     config = function()
         local lint = require("lint")
 
-        lint.linters_by_ft = {
-            python = { "ruff" },
-        }
+        -- lint.linters_by_ft = {
+        --     python = { "ruff" },
+        -- }
 
         -- Auto-lint on save and text change
         vim.api.nvim_create_autocmd({ "BufWritePost", "BufReadPost", "InsertLeave" }, {
