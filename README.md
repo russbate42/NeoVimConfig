@@ -185,8 +185,6 @@ MRs welcome!
 **rainbow-delimeters**
 
 **Markdown Preview**
-Note: To make this work, run this from the neovim command line
-`:call mkdp#util#install()`
 
 **Treesitter**
 Just basic, we can add more features later.
@@ -208,15 +206,20 @@ Just basic, we can add more features later.
 
  - [**VirtColumn**](https://github.com/xiyaowong/virtcolumn.nvim) 
  - [**Oil**](https://github.com/stevearc/oil.nvim) 
+ - [**Vim-Fugitive**](https://github.com/tpope/vim-fugitive) 
+ - [**Gitsigns**](https://github.com/lewis6991/gitsigns.nvim) 
+ - [**NeoGit**](https://github.com/neogitorg/neogit) 
 
 #### Package Wish List
+ - [x] NeoGit
  - [ ] Lualine
- - [ ] Vim Fugitive
- - [ ] Gitsigns
+ - [x] Vim Fugitive
+ - [x] Gitsigns
  - [ ] Minuet
  - [ ] Avante
  - [x] VirtColumn
  - [x] Oil
+ - [ ] Friendly Snippets - community driven snippet plugins
 
 ### To Do
  - [ ] Move user manual to separate docs page!
@@ -385,6 +388,28 @@ Motions are vimspeak for simply moving the cursor around the screen quickly.
  - `C-w =` equalize width and height of all windows
 
 ### Package Specific commands
+#### LSP
+ - `]d` Jump forward to diagnostic
+ - `[d` Jump backwards to diagnostic
+ - `<leader>d` Show diagnostic information
+ - `K` Show function information
+
+#### Git Integrations
+**Fugitive**
+ - `<leader>ga` :Git add
+ - `<leader>gc` :Git commit
+ - `<leader>gd` :Git diff
+
+**Gitsigns**
+ - `<leader>gh` :gitsigns preview_hunk - show git diff
+ - `<leader>gi` :gitsigns preview_hunk_inline - show git diff inline mode
+ - `<leader>gb` :gitsigns toggle_current_line_blame - show git blame
+ - `<leader>]h` Go to next git hunk
+ - `<leader>[h` Go to previous git hunk
+
+**Neogit**
+ - `<gg>` :Neogit<CR> - Open neogit.
+
 #### Autocomplete
 `<C-space>` will open the autocomplete menu.
 
@@ -399,6 +424,10 @@ Motions are vimspeak for simply moving the cursor around the screen quickly.
 - `<leader>bi` Search through bibliography.
 - - `<C-e>` Put whole citation down
 - - `<C-c>` Put citation title down
+- `<leader>gs` Show git status.
+- `<leader>gl` Show git log.
+- `<leader>gB` Show git branches.
+- `<leader>gS` Show git stashes.
 
 #### VimTeX
 `<leader>tc` Toggle conceal for math symbols.

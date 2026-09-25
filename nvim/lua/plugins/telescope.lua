@@ -25,7 +25,7 @@ return {
                         end,
 
                         -- Custom breakpoint for switching layouts
-                        flip_columns = 100,  -- Switch to vertical when width < 100
+                        flex = {flip_columns = 100},  -- Switch to vertical when width < 100
                         flip_lines = 20,     -- Switch to horizontal when height < 20
 
                         horizontal = {
@@ -131,6 +131,16 @@ return {
             -- Yanky
             vim.keymap.set('n', '<leader>py', '<cmd>Telescope yank_history<cr>',
                 { desc = 'Yank History' })
+
+            -- Git integrations
+            vim.keymap.set("n", "<leader>gs", builtin.git_status,
+                { desc = "Telescope git status" })
+            vim.keymap.set("n", "<leader>gl", builtin.git_commits,
+                { desc = "Telescope git log" })
+            vim.keymap.set("n", "<leader>gB", builtin.git_branches,
+                { desc = "Telescope git branches" })
+            vim.keymap.set("n", "<leader>gS", builtin.git_stash,
+                { desc = "Telescope git stash" })
 
             -- Making it look cool (transparent)
             vim.api.nvim_set_hl(0, "TelescopeNormal", { bg = "none" })
