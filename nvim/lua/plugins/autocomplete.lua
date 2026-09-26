@@ -8,6 +8,29 @@ return {
   },
 
   {
+    "L3MON4D3/LuaSnip",
+    dependencies = { "rafamadriz/friendly-snippets" },
+    config = function()
+        local luasnip = require("luasnip")
+        require("luasnip.loaders.from_vscode").lazy_load()
+        luasnip.filetype_extend("lua", { "luadoc" })
+        luasnip.filetype_extend("python", { "pydoc" })
+        luasnip.filetype_extend("sh", { "shelldoc" })
+        luasnip.filetype_extend("rust", { "rustdoc" })
+        luasnip.filetype_extend("java", { "javadoc" })
+        luasnip.filetype_extend("c", { "cdoc" })
+        luasnip.filetype_extend("cpp", { "cppdoc" })
+        luasnip.filetype_extend("php", { "phpdoc" })
+        luasnip.filetype_extend("ruby", { "rdoc" })
+        luasnip.filetype_extend("sh", { "shelldoc" })
+    end,
+  },
+
+  {
+    'rafamadriz/friendly-snippets',
+  },
+
+  {
   "hrsh7th/nvim-cmp",
   dependencies = {
     "hrsh7th/cmp-nvim-lsp",
@@ -17,6 +40,7 @@ return {
     "hrsh7th/cmp-cmdline",
     "micangl/cmp-vimtex",
     "L3MON4D3/LuaSnip",
+    "rafamadriz/friendly-snippets",
     "saadparwaiz1/cmp_luasnip",
   },
   config = function()
@@ -204,7 +228,7 @@ return {
     })
 
     -- Markdown-specific overrides
-    cmp.setup.filetype('md', {
+    cmp.setup.filetype('markdown', {
       sources = cmp.config.sources({
         { name = 'luasnip', keyword_length = 2 },  -- Snippets auto-trigger
         { name = 'buffer', keyword_length = 6 },  -- Buffer manual only

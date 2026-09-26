@@ -393,6 +393,16 @@ Motions are vimspeak for simply moving the cursor around the screen quickly.
  - `[d` Jump backwards to diagnostic
  - `<leader>d` Show diagnostic information
  - `K` Show function information
+ - `gR` Telescope lsp_references
+ - `gD` lsp buffer declaration
+ - `gd` Telescope lsp_definitions
+ - `gi` Telescope lsp_implementations
+ - `gt` Telescope lsp_type_definitions
+ - `v` See available code actions
+ - `<leader>rn` lsp buffer rename
+ - `<leader>D` Telescope diagnostics
+ - `<leader>d` Vim diagnositics - open float
+ - `<leader>rs` Restart lsp
 
 #### Git Integrations
 **Fugitive**
