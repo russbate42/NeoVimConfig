@@ -1,19 +1,18 @@
+vim.opt.shortmess:append("IasWcCO")  -- Suppress various messages
+vim.opt.cmdheight = 1              -- Hide command line (Neovim 0.8+)
 
--- vim.opt.shortmess:append("sIcFW")  -- Suppress various messages
--- vim.opt.cmdheight = 0              -- Hide command line (Neovim 0.8+)
+-- print('NeoVim main init.lua loading..')
+-- print('')
+-- print("For spelling type >>> :setlocal spell spelllang=en_us")
+-- print("To suppress VimTeX warnings type >>> :lua vim.g.vimtex_quickfix_mode = 0")
+-- print('')
 
-print('NeoVim main init.lua loading..')
-print('')
-print("For spelling type >>> :setlocal spell spelllang=en_us")
-print("To suppress VimTeX warnings type >>> :lua vim.g.vimtex_quickfix_mode = 0")
-print('')
-
-print('Loading custom configurations ..')
+-- print('Loading custom configurations ..')
 require('config')
 
 vim.cmd([[colorscheme rose-pine-moon]])
 
-print('Done loading configs and plugins ..')
+-- print('Done loading configs and plugins ..')
 
 -- Color for Telescope!
 vim.api.nvim_set_hl(0, "TelescopeNormal", { bg = "none" })

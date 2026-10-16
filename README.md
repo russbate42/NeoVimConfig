@@ -123,6 +123,9 @@ already installed: `pip install pynvim --upgrade`
 **NeoVim Alias**
 
 (Optional) alias the neovim appimage to something like `nv` or `nvim`.
+```bash
+alias nv='~/NeoVimConfig/nvim-linux-x86_64.appimage'
+```
 
 **Terminal Config**
 
@@ -153,7 +156,8 @@ size        = 10.0
 #### Running
 Finally, run the setup script.
 `source setup_nvim.sh`
-Run `~/nvim-linux-x86_64.appimage` or wherever you have saved/aliased to!
+Run `~/NeoVimConfig/nvim-linux-x86_64.appimage` or wherever you have
+saved/aliased to!
 
 Note that linters and formatters are not installed automatically. Manual install
 of ruff is required `:Mason` and `i` to install ruff.
@@ -226,7 +230,6 @@ Just basic, we can add more features later.
    - [ ] Ensure all package specific commands are listed
  - [ ] Update docs to link installed packages
  - [ ] LuaSnip Friends (friendly snippets?)
- - [ ] Move user manual to
  - [ ] Install vim fugitive & other git helpers
 
 #### Recent Changes
@@ -388,6 +391,9 @@ Motions are vimspeak for simply moving the cursor around the screen quickly.
  - `C-w =` equalize width and height of all windows
 
 ### Package Specific commands
+#### Telescope
+ - `:Telescope keymaps` For a list of keymaps
+
 #### LSP
  - `]d` Jump forward to diagnostic
  - `[d` Jump backwards to diagnostic
@@ -542,6 +548,7 @@ Here are the essential screen scrolling hotkeys in Neovim:
 
 These work in normal mode. The `Ctrl-f`/`Ctrl-b` and `Ctrl-d`/`Ctrl-u` are
 probably the most commonly used for quick navigation!
+
 ### Available Color Schemes
 If telescope is installed correctly, try `leader<pc>` to choose colors from a
 menu. Otherwise, these are auto-loaded in colorscheme.lua

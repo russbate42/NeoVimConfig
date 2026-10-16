@@ -1,4 +1,3 @@
-
 -- print("In VIM keymaps")
 
 vim.g.mapleader = " "
