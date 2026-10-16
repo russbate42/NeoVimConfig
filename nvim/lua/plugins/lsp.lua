@@ -7,6 +7,18 @@ return {
         "williamboman/mason-lspconfig.nvim",
     },
     config = function()
+
+        -- Manual ruff toggle (only for projects that need it)
+        -- vim.api.nvim_create_user_command("StartRuff", function()
+        --     vim.lsp.enable("ruff")
+        -- end, {})
+        --
+        -- vim.api.nvim_create_user_command("StopRuff", function()
+        --     vim.lsp.enable("ruff", false)
+        --     for _, c in ipairs(vim.lsp.get_clients({ name = "ruff" }))
+        --         do c:stop() end
+        --     end, {})
+
         -- Keymaps for LSP actions
         vim.api.nvim_create_autocmd("LspAttach", {
             callback = function(args)
