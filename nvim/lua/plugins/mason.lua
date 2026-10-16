@@ -74,7 +74,7 @@ return {
                 "bashls",        -- Bash/zsh
             },
             -- automatic_enable = { exclude = { "ruff" } },
-            automatic_enable = { "pyright", "ruff" },
+            automatic_enable = { "pyright", "ruff", "bashls" },
         })
     end,
 }
