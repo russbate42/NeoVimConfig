@@ -1,0 +1,15 @@
+name: Interactive MacOS Shell
+on:
+  workflow_dispatch:
+
+jobs:
+  interactive-ssh:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Open SSH / Web Shell Session
+        uses: mxschmitt/action-tmate@v3
+        with:
+          limit-access-to-actor: true

@@ -127,7 +127,8 @@ if [[ $main_os == *"Linux"* ]]; then
         exit 0
     fi
 elif [[ $main_os == *"Mac" ]]; then
-    printf "MacOS not supported yet. Returning 0\n"
+    printf "MacOS detected\n"
+    install_cmd=(brew install)
     exit 0
 else
     printf "Main OS Not detected. Returning 0\n"
@@ -168,7 +169,7 @@ elif [[ $tumbleweed == "true" ]]; then
     system_packages+=(lua lua55-luarocks)
     system_packages+=(python3 python3-virtualenv python3-neovim python3-pip)
     system_packages+=(clang clang-devel llvm llvm-devel make)
-    if [ ! $INSTALL_RUST ]; then
+    if [[ ! $INSTALL_RUST ]]; then
         system_packages+=(ripgrep tree-sitter)
     fi
 elif [[ $red_hat == "true" ]]; then
@@ -184,8 +185,14 @@ elif [[ $red_hat == "true" ]]; then
         system_packages+=(ripgrep tree-sitter)
     fi
 elif $macos; then
-    printf "\nMacOS not supported yet ..\n"
-    :
+    printf "\n${CYN}Updating brew${RST}\n"
+    brew update
+    printf "\n${CYN}Finished update ..${RST}\n"
+    system_packages=(nodejs npm luarocks python3-venv)
+    system_packages+=(python3-pynvim pip libclang-dev)
+    if [[ ! $INSTALL_RUST ]]; then
+        system_packages+=(ripgrep tree-sitter)
+    fi
 fi
 
 
@@ -364,6 +371,7 @@ printf "${RST}"
 printf "\nPlease add FiraCode Mono (default) Nerd Font to your terminal config\n"
 printf "See Manual Install ${BOLD}Terminal Config${RST}\n\n"
 #-------------------------------------------------------------------------------
+
 
 # Print summary
 #-------------------------------------------------------------------------------
