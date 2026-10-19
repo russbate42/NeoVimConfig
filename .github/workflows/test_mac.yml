@@ -1,0 +1,16 @@
+name: Test install script on macOS
+on:
+  workflow_dispatch:
+
+jobs:
+  test-script:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Run Auto Installer
+        run: |
+        chmod +x auto_install.sh
+        sudo ./auto_install.sh
+  
