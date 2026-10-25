@@ -103,8 +103,13 @@ macos=false
 install_cmd=
 failures=false
 
+brew_user() {
+    sudo -H -u "${SUDO_USER}" brew "$@"
+}
+
 if [[ $main_os == *"Linux"* ]]; then
     # flavour_str=$(cat /etc/issue)
+    linux=true
     os_release_pretty_name="$(cat /etc/os-release | grep PRETTY_NAME)"
     if [[ $os_release_pretty_name == *"Ubuntu"* ]]; then
         printf "\n${MAG}Ubuntu detected${RST}\n"
@@ -126,15 +131,25 @@ if [[ $main_os == *"Linux"* ]]; then
         printf "\n${RED}ERROR: Linux flavour not found. Returning 0${RST}\n"
         exit 0
     fi
-elif [[ $main_os == *"Mac" ]]; then
+elif [[ $main_os == *"Darwin"* ]]; then
     printf "MacOS detected\n"
-    install_cmd=(brew install)
-    exit 0
+    if [ "${BASH_VERSINFO[0]}" -lt 4 ]; then
+        if [ -x "/opt/homebrew/bin/bash" ]; then
+            exec /opt/homebrew/bin/bash "$0" "$@"
+        elif [ -x "/usr/local/bin/bash" ]; then
+            exec /usr/local/bin/bash "$0" "$@"
+        else
+            echo "Error: This script requires Bash 4+ or higher." >&2
+            echo "Please install it on macOS using: brew install bash" >&2
+            exit 1
+        fi
+    fi
+    macos=true
+    install_cmd=(brew_user install)
 else
     printf "Main OS Not detected. Returning 0\n"
     exit 0
 fi
-
 
 # Update installer and define packages
 system_packages=()
@@ -188,8 +203,7 @@ elif $macos; then
     printf "\n${CYN}Updating brew${RST}\n"
     brew update
     printf "\n${CYN}Finished update ..${RST}\n"
-    system_packages=(nodejs npm luarocks python3-venv)
-    system_packages+=(python3-pynvim pip libclang-dev)
+    system_packages=(nodejs npm luarocks llvm)
     if [[ ! $INSTALL_RUST ]]; then
         system_packages+=(ripgrep tree-sitter)
     fi
@@ -216,6 +230,9 @@ for pkg in "${system_packages[@]}"; do
     printf "\n"
 done
 
+# if [[ "${macos}" == "true" ]]; then
+#     sudo -H -u "${SUDO_USER}" "$(dirname "${BREW}")/python3" -m pip install --user --break-system-packages pynvim
+# fi
 
 # Unique to Ubuntu installs (I think)
 if [[ $ubuntu == "true" ]]; then
@@ -235,7 +252,10 @@ python_version_satisfied=false
 if command -v python3 &> /dev/null; then
     printf "\n${CYN}Checking python version ..${RST}\n"
     py_version_str="$(python3 --version)"
-    if [[ $py_version_str == *"3.13"* ]]; then
+    if [[ $py_version_str == *"3.14"* ]]; then
+        python_version_satisfied=true
+        printf "\t${CYN}Python version >=3.14 found${RST}\n"
+    elif [[ $py_version_str == *"3.13"* ]]; then
         python_version_satisfied=true
         printf "\t${CYN}Python version >=3.13 found${RST}\n"
     elif [[ $py_version_str == *"3.12"* ]]; then
@@ -290,7 +310,13 @@ if  command -v curl &> /dev/null && [[ "${INSTALL_RUST}" == "true" ]]; then
         done
     else
         printf "\n\t${CYN}Installing rust as ${SUDO_USER} ..${RST}\n"
-        user_home=$(getent passwd "${SUDO_USER}" | cut -d: -f6)
+        if [[ "${linux}" == "true" ]]; then
+            user_home=$(getent passwd "${SUDO_USER}" | cut -d: -f6)
+        elif [[ "${macos}" == "true" ]]; then
+            user_home=$(dscl . -read "/Users/${SUDO_USER}" NFSHomeDirectory | awk '{print $2}')
+        else
+            printf "Can't determine os. Rust install will likely fail.\n'"
+        fi
         sudo -u "${SUDO_USER}" sh -c \
             'curl --proto "=https" --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y'
         printf "\n${BLU}Installing ${RED}rust${BLU} packages${RST}\n"
@@ -309,7 +335,13 @@ fi
 #-------------------------------------------------------------------------------
 nv_download_success=false
 release_page="https://github.com/neovim/neovim/releases/download/stable/"
-current_version="nvim-linux-x86_64.appimage"
+if [[ $linux == "true" ]]; then
+    current_version="nvim-linux-x86_64.appimage"
+elif [[ $macos == "true" ]]; then
+    current_version="nvim-macos-arm64.tar.gz"
+else
+    printf "Unkown download for OS.\n"
+fi
 download_path="${release_page}${current_version}"
 printf "\n${BLU}Downloading NeoVim!!${RST}\n"
 curl -LO --fail "${download_path}"
@@ -324,6 +356,9 @@ if [[ $? -eq 0 ]]; then
         ./$current_version --appimage-extract
         printf "\t${CYN}Aliasing to nv ..${RST}\n\n"
         ln -s "$(pwd)/squashfs-root/usr/bin/nvim" /usr/local/bin/nv
+    elif [[ "${macos}" == "true" ]]; then
+        xattr -c ./nvim-macos-arm64.tar.gz #(to avoid "unknown developer" warning)
+        tar xzvf nvim-macos-arm64.tar.gz
     else
         printf "\t${CYN}User install detected ..${RST}\n"
         printf "\t${CYN}Changing permissions ..${RST}\n"
@@ -426,5 +461,7 @@ printf  -- "${BLU}-----------------------------------------------${RST}\n\n"
 # NeoVim alias
 if [[ ! -f /.dockerenv ]]; then
 	printf "Add $(pwd)/nvim-linux-x86_64.appimage to aliases!!\n"
+elif [[ "${macos}" == true ]]; then
+	printf "Add ./nvim-macos-arm64/bin/nvim to aliases!!\n"
 fi
 printf "\n\t${GRN}Done auto install!${RST}\n\n"

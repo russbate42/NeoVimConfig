@@ -16,11 +16,11 @@ manual install.
 **Supported Systems**
  - Ubuntu
  - OpenSUSE Tumbleweed
+ - MacOS
 
 Working on support for
  - OpenSUSE
  - Arch
- - MacOS
  - WSL
 
 ## Manual Install
@@ -62,6 +62,12 @@ Build type: Release
 LuaJIT 2.1.1741730670
 Run "nvim -V1 -v" for more info
 ```
+For mac users, download the tar file and unzip it here, or wherever you like.
+```bash
+xattr -c ./nvim-macos-arm64.tar.gz
+tar xzvf nvim-macos-arm64.tar.gz
+```
+It can be run with `./nvim-macos-arm64/bin/nvim` if extracted here.
 
 **System Tools**
 ```bash
@@ -157,11 +163,11 @@ size        = 10.0
 Finally, run the setup script.
 `source setup_nvim.sh`
 Run `~/NeoVimConfig/nvim-linux-x86_64.appimage` or wherever you have
-saved/aliased to!
+saved/aliased to! For MacOS users, the alias needs to point to where the file
+was unzipped (likely this folder). 
 
-Note that linters and formatters are not installed automatically. Manual install
-of ruff is required `:Mason` and `i` to install ruff.
-
+Note that linters and formatters are not always installed automatically. To
+install linters, formatters, type checkers etc, open Mason with :Mason.
 </details>
 
 ## Remote Use

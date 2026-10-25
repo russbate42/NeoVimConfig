@@ -13,6 +13,6 @@ jobs:
 
       - name: Open SSH Session
         uses: owenthereal/action-upterm@v2
-        timeout-minutes: 30
+        timeout-minutes: 120
         with:
           limit-access-to-actor: true
